@@ -43,13 +43,13 @@ I chose not to add extra classes or complex appointment scheduling because I wan
 
 **a. How you used AI**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
-- What kinds of prompts or questions were most helpful?
+I used AI to brainstorm the four classes, draft the UML, create the Python skeleton, and help implement the logic. AI suggested validating task inputs, keeping tasks connected to their pets, and using a consistent format for the daily plan. I accepted these ideas. Asking how the Scheduler should get tasks from all of the owner's pets was especially helpful. The implementation now uses Owner.get_all_tasks() to return pet and task pairs.
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+After the AI review, I chose to keep the four-class design and leave out extra classes and complex appointment scheduling. I wanted the project to stay manageable. I also refined the original idea of returning only tasks: returning each task with its pet makes the schedule easier to understand when multiple pets have similar tasks.
+
+To verify the result, the AI assistant ran python main.py and python -m pytest. The demo printed tasks for two pets, stayed within a 40-minute budget, and explained why grooming was skipped. All 19 tests passed, including task completion, adding a task, and a check that Scheduler gets tasks through Owner.get_all_tasks(). These results support the logic we tested, but the Streamlit UI still needs to be connected.
 
 ---
 

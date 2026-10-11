@@ -12,6 +12,16 @@ A busy pet owner needs help staying consistent with pet care. They want an assis
 
 Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
 
+## Implementation Summary
+
+The logic layer in `pawpal_system.py` uses four classes. `Task` stores an activity's name, duration, priority, recurrence, and last completion date. Its `completed` property reports whether completion has ever been recorded; `is_due(date)` checks whether it still needs doing on a particular day. `Pet` manages its tasks, and `Owner` manages pets. `Owner.get_all_tasks()` returns `(pet, task)` pairs so tasks stay associated with their pets.
+
+`Scheduler` retrieves all tasks through that Owner method, orders them by priority, and fits whole tasks into one shared time budget. The short-task preference breaks ties within a priority; otherwise, collection order is preserved. Tasks that do not fit are skipped with reasons, and the scheduler continues checking other tasks. Once and daily recurrence are supported, and generating a plan does not mark tasks complete.
+
+The plan is a dictionary with `selected`, `skipped`, `total_minutes`, and `remaining_minutes`. Each selected or skipped entry contains `pet`, `task`, and `reason`. Tasks run one after another; fixed appointment times and weekly recurrence are outside this version. The backend has no Streamlit dependency, and the starter UI has not been connected yet.
+
+Task inputs and owner scheduling settings are validated when created or updated through their methods. `main.py` demonstrates the system, and `tests/test_pawpal.py` checks completion, task addition, multi-pet scheduling through the Owner accessor, priorities, time limits, recurrence, and validation.
+
 ## What you will build
 
 Your final app should:
@@ -44,21 +54,30 @@ pip install -r requirements.txt
 
 ## 🖥️ Sample Output
 
-Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
+Run the terminal demo with `python main.py`. It creates an owner with two pets and four tasks. Actual output:
 
 ```
-# e.g.:
-# Daily plan for Biscuit (Golden Retriever):
-#   08:00 — Morning walk (30 min) [priority: high]
-#   09:00 — Feeding (10 min) [priority: high]
-#   ...
+Today's Schedule
+Owner: Jordan | Available time: 40 min
+
+1. Mochi: Feeding (5 min) [high]
+   High priority; fits the remaining time.
+2. Biscuit: Morning walk (25 min) [high]
+   High priority; fits the remaining time.
+3. Mochi: Playtime (10 min) [medium]
+   Medium priority; fits the remaining time.
+
+Planned: 40 min | Remaining: 0 min
+
+Skipped:
+- Biscuit: Grooming - Needs 20 min; only 0 min remain.
 ```
 
 ## 🧪 Testing PawPal+
 
 ```bash
 # Run the full test suite:
-pytest
+python -m pytest
 
 # Run with coverage:
 pytest --cov
@@ -67,7 +86,9 @@ pytest --cov
 Sample test output:
 
 ```
-# Paste your pytest output here
+tests\test_pawpal.py ...................                                 [100%]
+
+============================= 19 passed in 0.16s ==============================
 ```
 
 ## 📐 Smarter Scheduling
