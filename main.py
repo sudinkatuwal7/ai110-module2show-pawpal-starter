@@ -3,6 +3,39 @@
 from pawpal_system import Owner, Pet, Scheduler, Task
 
 
+def print_tasks(title: str, task_pairs: list[tuple[Pet, Task]]) -> None:
+    """Print pet-task pairs with their scheduled time and completion status."""
+    print(f"\n{title}")
+    for pet, task in task_pairs:
+        status = "completed" if task.completed else "pending"
+        print(f"- {task.scheduled_time or 'Untimed'} | {pet.name}: {task.name} [{status}]")
+
+
+def demo_sorting_and_filtering() -> None:
+    """Show chronological sorting and filters using a separate set of tasks."""
+    owner = Owner("Jordan")
+    dog, cat = Pet("Biscuit", "dog"), Pet("Mochi", "cat")
+    owner.add_pet(dog)
+    owner.add_pet(cat)
+    dog.add_task(Task("Evening walk", 20, scheduled_time="18:00"))
+    dog.add_task(Task("Grooming", 15))
+    feeding = Task("Feeding", 5, scheduled_time="07:30")
+    feeding.mark_complete()
+    cat.add_task(feeding)
+    cat.add_task(Task("Playtime", 10, scheduled_time="12:00"))
+
+    scheduler = Scheduler()
+    task_pairs = owner.get_all_tasks()
+    print_tasks("Sorting and Filtering Demo - Original order", task_pairs)
+    print_tasks("Sorted by scheduled time", scheduler.sort_tasks_by_time(task_pairs))
+    print_tasks("Pet filter: mochi", scheduler.filter_tasks(owner, pet_name="mochi"))
+    print_tasks("Completed tasks", scheduler.filter_tasks(owner, completed=True))
+    print_tasks(
+        "Pending tasks for Mochi",
+        scheduler.filter_tasks(owner, pet_name="MOCHI", completed=False),
+    )
+
+
 def main() -> None:
     """Build and print a daily care plan for two pets."""
     owner = Owner("Jordan", available_minutes=40, prefer_short_tasks=True)
@@ -29,6 +62,8 @@ def main() -> None:
         print("\nSkipped:")
         for entry in plan["skipped"]:
             print(f"- {entry['pet'].name}: {entry['task'].name} - {entry['reason']}")
+
+    demo_sorting_and_filtering()
 
 
 if __name__ == "__main__":
