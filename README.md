@@ -75,21 +75,37 @@ Skipped:
 - Biscuit: Grooming - Needs 20 min; only 0 min remain.
 ```
 
-## 🧪 Testing PawPal+
+## Testing PawPal+
+
+Run the full pytest suite from the project directory:
 
 ```bash
-# Run the full test suite:
-python -m pytest -p no:cacheprovider
+python -m pytest
 
-# Run with coverage:
+# Optional coverage report (requires pytest-cov):
 pytest --cov
 ```
 
-Sample test output:
+The tests cover chronological sorting (including minutes, tied times, and untimed tasks), filtering by pet and completion status, daily/weekly recurrence chains, and exact same-time conflict detection across pets and dates. They also check duplicate prevention by object identity, strict owner-setting validation, and rejected updates leaving settings unchanged. Edge cases include empty inputs, zero time budgets, invalid task details and times, completed tasks, repeated completion, leap days, and year changes.
 
+Full terminal output from the successful `python -m pytest` run for Phase 5:
+
+```text
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\crisu\Downloads\ai110-module2show-pawpal-starter-main\ai110-module2show-pawpal-starter
+plugins: anyio-4.12.1
+collected 97 items
+
+tests\test_pawpal.py ................................................... [ 52%]
+..............................................                           [100%]
+
+============================= 97 passed in 0.13s ==============================
 ```
-87 passed in 0.11s
-```
+
+This run completed without Windows cache-permission errors; no fallback was needed. If cache permissions interfere with a later run, use `python -m pytest -p no:cacheprovider` to run the same tests without pytest's cache plugin.
+
+**Confidence Level: 4/5 stars (★★★★☆).** All 97 tests pass, which gives me confidence in the backend behaviors covered by the suite. Exact-time conflict detection does not check overlapping task durations, and the Streamlit UI is not comprehensively covered by automated tests, so these results do not verify every possible scheduling or user-interface scenario.
 
 ## Smarter Scheduling
 

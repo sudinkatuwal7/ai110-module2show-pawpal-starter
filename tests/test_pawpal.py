@@ -29,6 +29,48 @@ def test_task_addition():
     assert pet.tasks[-1] is task
 
 
+def test_task_addition_rejects_same_object_but_allows_identical_details():
+    pet = Pet("Biscuit", "dog")
+    first = Task("Walk", 20)
+    second = Task("Walk", 20)
+    assert first == second
+    assert first is not second
+    pet.add_task(first)
+
+    with pytest.raises(ValueError, match="already in the pet's task list"):
+        pet.add_task(first)
+
+    assert len(pet.tasks) == 1
+    assert pet.tasks[0] is first
+
+    pet.add_task(second)
+
+    assert len(pet.tasks) == 2
+    assert pet.tasks[0] is first
+    assert pet.tasks[1] is second
+
+
+def test_pet_addition_rejects_same_object_but_allows_identical_details():
+    owner = Owner("Jordan")
+    first = Pet("Mochi", "cat")
+    second = Pet("Mochi", "cat")
+    assert first == second
+    assert first is not second
+    owner.add_pet(first)
+
+    with pytest.raises(ValueError, match="already in the owner's pet list"):
+        owner.add_pet(first)
+
+    assert len(owner.pets) == 1
+    assert owner.pets[0] is first
+
+    owner.add_pet(second)
+
+    assert len(owner.pets) == 2
+    assert owner.pets[0] is first
+    assert owner.pets[1] is second
+
+
 def test_owner_collects_tasks_from_multiple_pets():
     dog, cat = Pet("Biscuit", "dog"), Pet("Mochi", "cat")
     walk, feeding = Task("Walk", 20), Task("Feeding", 5)
@@ -157,6 +199,28 @@ def test_owner_rejects_invalid_time_on_creation_and_update():
     assert owner.available_minutes == 30
 
 
+@pytest.mark.parametrize("minutes, preference, error", [
+    (True, False, "Available time"),
+    (False, False, "Available time"),
+    (2.5, False, "Available time"),
+    (45, 0, "short-task preference"),
+    (45, 1, "short-task preference"),
+    (45, "yes", "short-task preference"),
+])
+def test_owner_rejects_invalid_setting_types_without_partial_updates(minutes, preference, error):
+    with pytest.raises(ValueError, match=error):
+        Owner("Jordan", available_minutes=minutes, prefer_short_tasks=preference)
+
+    owner = Owner("Jordan", available_minutes=30, prefer_short_tasks=True)
+    # Even the valid setting must stay unchanged if the other setting is invalid.
+    with pytest.raises(ValueError, match=error):
+        owner.update_settings(available_minutes=minutes, prefer_short_tasks=preference)
+
+    assert owner.available_minutes == 30
+    assert type(owner.available_minutes) is int
+    assert owner.prefer_short_tasks is True
+
+
 def test_removal_targets_the_selected_instance():
     first, second = Task("Feeding", 5), Task("Feeding", 5)
     pet = Pet("Mochi", "cat", tasks=[first, second])
@@ -225,12 +289,16 @@ def test_time_sort_is_chronological_and_does_not_mutate_input():
         (cat, Task("Morning", 5, scheduled_time="09:00")),
         (dog, Task("Midnight", 5, scheduled_time="00:00")),
         (cat, Task("Late", 5, scheduled_time="23:59")),
+        (dog, Task("Later morning", 5, scheduled_time="09:45")),
+        (cat, Task("Earlier morning", 5, scheduled_time="09:05")),
     ]
     original = list(pairs)
 
     result = Scheduler().sort_tasks_by_time(pairs)
 
-    assert [task.name for _, task in result] == ["Midnight", "Morning", "Evening", "Late"]
+    assert [task.name for _, task in result] == [
+        "Midnight", "Morning", "Earlier morning", "Later morning", "Evening", "Late",
+    ]
     assert pairs == original
     assert result is not pairs
     assert result[0] is pairs[2]
@@ -330,6 +398,46 @@ def test_recurring_completion_creates_one_next_occurrence(recurrence, days, comp
     assert not next_task.is_due(completion_date)
     assert next_task.is_due(next_task.due_date)
     assert not task.is_due(next_task.due_date)
+
+
+@pytest.mark.parametrize("recurrence, second_date, third_date", [
+    ("daily", date(2026, 10, 12), date(2026, 10, 13)),
+    ("weekly", date(2026, 10, 18), date(2026, 10, 25)),
+])
+def test_recurring_completion_continues_chain_without_duplicates(recurrence, second_date, third_date):
+    first_date = date(2026, 10, 11)
+    original = Task("Feeding", 5, recurrence=recurrence, scheduled_time="07:30", due_date=first_date)
+    pet = Pet("Mochi", "cat", tasks=[original])
+
+    second = pet.complete_task(original, first_date)
+
+    assert second is not None
+    assert second.due_date == second_date
+    assert len(pet.tasks) == 2
+
+    third = pet.complete_task(second, second_date)
+
+    assert third is not None
+    assert third.due_date == third_date
+    assert third.recurrence == recurrence
+    assert third.scheduled_time == "07:30"
+    assert third.completed is False
+    assert original.last_completed_date == first_date
+    assert second.last_completed_date == second_date
+    assert original is not second
+    assert third is not original
+    assert third is not second
+
+    # Completing either earlier occurrence again must not add a fourth task.
+    assert pet.complete_task(original, third_date) is None
+    assert pet.complete_task(second, third_date) is None
+    assert len(pet.tasks) == 3
+    assert pet.tasks[0] is original
+    assert pet.tasks[1] is second
+    assert pet.tasks[2] is third
+    pending = [task for task in pet.tasks if not task.completed]
+    assert len(pending) == 1
+    assert pending[0] is third
 
 
 @pytest.mark.parametrize("recurrence", ["once", "daily", "weekly"])
