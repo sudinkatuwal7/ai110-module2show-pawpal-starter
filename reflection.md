@@ -17,8 +17,11 @@ In my UML design, Owner would connect to Pet, and Pet would connect to Task. Sch
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+After reviewing the design with AI, I decided to keep the original four classes: Owner, Pet, Task, and Scheduler. Each class has a clear responsibility, so I kept the UML and Python skeleton unchanged.
+
+The review helped me identify a few improvements to make during implementation. I plan to validate task inputs, keep each task associated with its pet, define a consistent format for the scheduler output, and set clear rules for task priorities and time limits. These are planned improvements and have not been implemented yet.
+
+I chose not to add extra classes or complex appointment scheduling because I want to keep the project manageable within the four-hour time frame.
 
 ---
 
