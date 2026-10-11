@@ -34,8 +34,11 @@ I chose not to add extra classes or complex appointment scheduling because I wan
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+I chose to keep conflict detection simple. The scheduler groups pending tasks by their date and exact starting time, including tasks for different pets, and returns a warning when a group has more than one task. It uses each task's due date when available, otherwise the planning date, which defaults to today. It ignores completed tasks and tasks without a scheduled time. It only reports conflicts; it does not change tasks or the generated plan.
+
+The tradeoff is that it detects identical starting times on the same date but does not detect overlapping intervals with different starting times. For example, tasks scheduled for 09:00–09:30 and 09:15–09:45 would not trigger a warning. I chose this approach for a short assignment because the dictionary grouping is easy to understand and test, while full overlap detection would need more logic and edge cases. I kept the explicit dictionary version because a shorter version would not improve what it detects.
+
+Later, I could combine each task's date and starting time, add its duration to calculate an ending time, and check whether two intervals overlap. I would add tests for partial overlaps, one task inside another, and tasks that cross midnight. Tasks that start exactly when another ends would not count as overlapping.
 
 ---
 
