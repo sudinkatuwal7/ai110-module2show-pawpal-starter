@@ -4,8 +4,16 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+My initial design is for an app that helps a busy owner keep up with pet care. The three main actions are adding a pet, adding or editing care tasks with a duration and priority, and generating a daily plan based on the owner's available time and task priorities.
+
+I would use four classes:
+
+- **Owner:** Stores basic owner information, available time, and care preferences. An owner has pets.
+- **Pet:** Stores basic pet information and keeps track of that pet's care tasks. Each pet belongs to an owner.
+- **Task:** Represents a care activity, like feeding or walking, with a name, duration in minutes, and priority. Each task is for a pet.
+- **Scheduler:** Uses the owner's available time and the pet's tasks to make a daily plan. It considers higher-priority tasks first, chooses tasks that fit in the time available, and explains its choices.
+
+In my UML design, Owner would connect to Pet, and Pet would connect to Task. Scheduler would use information from these classes to build the plan.
 
 **b. Design changes**
 

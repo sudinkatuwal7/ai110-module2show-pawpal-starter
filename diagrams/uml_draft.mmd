@@ -1,0 +1,40 @@
+classDiagram
+    class Owner {
+        +name
+        +available_minutes
+        +prefer_short_tasks
+        +pets
+        +add_pet(pet)
+        +update_settings(...)
+        +get_all_tasks()
+    }
+
+    class Pet {
+        +name
+        +species
+        +breed
+        +tasks
+        +add_task(task)
+        +remove_task(task)
+    }
+
+    class Task {
+        +name
+        +duration_minutes
+        +priority
+        +recurrence
+        +last_completed_date
+        +update_details(...)
+        +is_due(date)
+        +mark_complete(date)
+    }
+
+    class Scheduler {
+        +priority_order
+        +generate_plan(owner, date)
+    }
+
+    Owner "1" --> "0..*" Pet : has
+    Pet "1" --> "0..*" Task : has
+    Scheduler ..> Owner : uses time and preferences
+    Scheduler ..> Task : selects tasks for daily plan
