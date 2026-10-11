@@ -46,6 +46,7 @@ classDiagram
         +sort_tasks_by_time(task_pairs: list~PetTaskPair~) list~PetTaskPair~
         +filter_tasks(owner: Owner, pet_name=None, completed=None) list~PetTaskPair~
         +detect_conflicts(task_pairs: list~PetTaskPair~, on_date=None) list~str~
+        +next_available_slot(owner: Owner, duration_minutes: int, start_time="09:00", end_time="17:00", on_date=None) Optional~str~
         +generate_plan(owner: Owner, on_date=None) dict
     }
 
@@ -58,4 +59,4 @@ classDiagram
 
     note for Task "completed is a read-only property derived from last_completed_date. scheduled_time uses HH:MM. Recurrence is once, daily, or weekly."
     note for Pet "complete_task completes the original and adds a daily or weekly next occurrence based on the completion date. Repeated completion adds nothing."
-    note for Scheduler "Conflict detection checks identical start times on the same effective date, not duration overlaps. It is separate from generate_plan."
+    note for Scheduler "Conflict warnings check identical starts. next_available_slot scans duration intervals for a free gap without mutation. Both are separate from generate_plan."

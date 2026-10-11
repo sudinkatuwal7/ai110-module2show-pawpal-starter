@@ -6,6 +6,18 @@ This log records the agent workflow and prompt-comparison work completed for Paw
 
 ## Agent Workflow (SF7)
 
+### Bonus algorithm and persistence follow-up
+
+**Requested task:** After correcting the five bonus categories, I asked Codex to complete the remaining achievable work and commit/push it. The agent scoped a third algorithmic capability, next-available-slot search, along with JSON persistence and explicit formatting documentation. This work followed the original prompt comparison; it was not part of either frozen candidate.
+
+**Completed work:** Codex added `Scheduler.next_available_slot()` to sort occupied intervals across pets and scan for the first sufficient gap, including overlapping/nested reservations, touching endpoints and previous-day spillover. It exposed this through a Streamlit form and a CLI demo. It added validated, versioned JSON Save/Load with atomic file replacement and editor-state reset after loading. The four domain classes remain intact. It documented the existing formatting APIs and added 34 tests, including a separate-process load and an independent minute-by-minute search oracle. The full suite passed 150 cases, including all original 97 and frozen 19 cases.
+
+**Files added/modified:** `pawpal_system.py` (slot search), `persistence.py` (new storage functions), `app.py` (search and Save/Load controls), `main.py` (CLI example), `tests/test_bonus_features.py` (new tests), `.gitignore` (exclude local saves), `README.md`, `reflection.md`, this log, `diagrams/uml.mmd`, `diagrams/uml_final.mmd`, `docs/bonus_verification.md`, and historical-report pointers in `docs/submission_readiness.md` and `docs/prompt_comparison.md`. No dependencies or frozen evidence were changed.
+
+**Corrections and review:** My manual correction was supplying the actual five bonus categories. I did not manually repair the new code. The agent's first test run had 31 passes and three failures caused by its new AppTest helper checking the clicked Button instead of the returned AppTest. The agent corrected that helper; all 34 new tests then passed, followed by all 150 tests. Automated UI verification is not a manual browser or accessibility review. Persistence requires explicit Save/Load, uses a single local file, and has no multi-user conflict resolution. Search suggests a slot without assigning it or changing the existing priority-plan algorithm.
+
+### Earlier pending-task editor workflow
+
 > Document your experience using an AI agent (e.g., Cursor Agent, Claude, Copilot) to make multi-step changes autonomously.
 
 **What task did you give the agent?**
@@ -41,4 +53,4 @@ See [the full comparison and acceptance review](docs/prompt_comparison.md) and [
 
 **Which approach did you use in your final implementation and why?**
 
-I selected Strategy A for integration because I prefer its form-based editing experience: users change task fields together and submit them with **Save changes**. Both candidates passed the same checks, so this choice does not turn the experimental tie into a claim that Strategy A or direct prompting is generally better. After my approval, the preserved A implementation and the unchanged 19 frozen acceptance tests were copied into main's working tree. The backend, original 97 tests, evidence archive and both candidate worktrees were preserved. The integration remains uncommitted for review, and no manual browser verification is claimed.
+I selected Strategy A for integration because I prefer its form-based editing experience: users change task fields together and submit them with **Save changes**. Both candidates passed the same checks, so this choice does not turn the experimental tie into a claim that Strategy A or direct prompting is generally better. After my approval, the preserved A implementation and the unchanged 19 frozen acceptance tests were copied into main's working tree. The backend, original 97 tests, evidence archive and both candidate worktrees were preserved during that integration. The final project was subsequently committed and pushed as `7013138f8599520c275fd9cf47a59f329e346bfc`. The bonus work documented above extends main separately; it does not change the frozen candidates or the experimental tie. No manual browser verification is claimed.

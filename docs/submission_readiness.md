@@ -1,5 +1,7 @@
 # PawPal+ submission-readiness audit
 
+> Historical audit before the first submission commit. That project state was subsequently committed and pushed as `7013138f8599520c275fd9cf47a59f329e346bfc`. The later bonus features and 150-test results are recorded in [bonus verification](bonus_verification.md). The findings below describe the earlier 116-test, session-only version and are retained as evidence.
+
 Audited October 11, 2026, on `main` in the original `ai110-module2show-pawpal-starter` repository. HEAD remains `98805949bffcb69f5e5299a4deaafe6b8bdb3623`; the completed work is still uncommitted. No packages were installed and nothing was pushed or submitted.
 
 ## Required project evidence

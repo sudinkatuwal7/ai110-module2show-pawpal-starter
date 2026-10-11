@@ -1,5 +1,7 @@
 # PawPal+ pending-task editor: prompt comparison
 
+> Historical experiment and integration report. The integrated project was later committed and pushed as `7013138f8599520c275fd9cf47a59f329e346bfc`. Subsequent bonus work extends main with persistence and free-slot search; see [bonus verification](bonus_verification.md). Frozen candidates, original evidence and the experimental tie remain unchanged.
+
 Evaluation date: **2026-10-11**, America/Chicago. Experimental result: **tie**. Integration decision: **Strategy A selected by the user for its form-based editing experience and copied into main's working tree; not committed**.
 
 Both unchanged implementations pass the same 97 baseline tests and 19 frozen acceptance tests. The evaluator independently reproduced all 116 passes for each. Review found different strengths, but no demonstrated correctness or overall quality advantage large enough to select a winner. This is one case study with unequal prior context, not evidence that either prompting strategy is generally better.

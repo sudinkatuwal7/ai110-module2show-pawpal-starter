@@ -69,6 +69,21 @@ def demo_task_conflicts() -> None:
         print(f"- {warning}")
 
 
+def demo_next_available_slot() -> None:
+    """Show duration-aware gap finding across pets, including overlapping tasks."""
+    dog, cat = Pet("Biscuit", "dog"), Pet("Mochi", "cat")
+    dog.add_task(Task("Walk", 30, scheduled_time="09:00"))
+    cat.add_task(Task("Grooming", 30, scheduled_time="09:15"))
+    cat.add_task(Task("Feeding", 15, scheduled_time="10:00"))
+    owner = Owner("Jordan", pets=[dog, cat])
+    scheduler = Scheduler()
+    print("\nNext Available Slot Demo (09:00-11:00)")
+    print("Reserved: Biscuit 09:00-09:30; Mochi 09:15-09:45 and 10:00-10:15")
+    for duration in (15, 20, 60):
+        slot = scheduler.next_available_slot(owner, duration, "09:00", "11:00")
+        print(f"- {duration} minutes: {slot or 'No available slot'}")
+
+
 def main() -> None:
     """Build and print a daily care plan for two pets."""
     owner = Owner("Jordan", available_minutes=40, prefer_short_tasks=True)
@@ -99,6 +114,7 @@ def main() -> None:
     demo_sorting_and_filtering()
     demo_recurring_tasks()
     demo_task_conflicts()
+    demo_next_available_slot()
 
 
 if __name__ == "__main__":

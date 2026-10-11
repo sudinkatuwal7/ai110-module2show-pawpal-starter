@@ -3,6 +3,20 @@ from datetime import date
 import streamlit as st
 
 from pawpal_system import Owner, Pet, Scheduler, Task
+from persistence import load_owner, save_owner
+
+
+def load_saved_data() -> None:
+    """Replace session data only after a complete successful load."""
+    try:
+        restored = load_owner()
+    except (OSError, ValueError) as error:
+        st.session_state.storage_notice = ("error", f"Could not load saved data: {error}")
+        return
+    # Old widget selections and editor references belong to the previous objects.
+    st.session_state.clear()
+    st.session_state.owner = restored
+    st.session_state.storage_notice = ("success", "Loaded saved pets, tasks, and settings.")
 
 
 def complete_task_today(pet: Pet, task: Task) -> None:
@@ -92,7 +106,8 @@ with st.expander("Scenario", expanded=True):
 **PawPal+** is a pet care planning assistant. It helps a pet owner plan care tasks
 for their pet(s) based on constraints like time, priority, and preferences.
 
-Your pets and tasks stay available as you use the app in this session.
+Use Save data at the bottom to keep your pets and tasks between runs.
+Use Load saved data to restore your last save into this session.
 """
     )
 
@@ -390,3 +405,50 @@ if plan is not None:
         ])
 else:
     st.info("Generate a schedule after adding tasks or changing your care settings.")
+
+st.divider()
+st.subheader("Find a free time")
+st.caption(
+    "Find space for an additional task across all pets. Pending timed tasks reserve their full "
+    "duration; completed and untimed tasks do not. This suggests a time without changing tasks. "
+    "Use the returned time and search date when adding or editing a task."
+)
+with st.form("slot_search"):
+    slot_date = st.date_input("Search date", value=date.today(), key="slot_date")
+    slot_duration = st.number_input("Minutes needed", min_value=1, value=20, key="slot_duration")
+    slot_start = st.text_input("Window start", value="09:00", key="slot_start")
+    slot_end = st.text_input("Window end", value="17:00", key="slot_end", help="24:00 means end of day.")
+    find_slot = st.form_submit_button("Find next available slot", key="find_slot")
+if find_slot:
+    try:
+        slot = scheduler.next_available_slot(owner, slot_duration, slot_start, slot_end, slot_date)
+    except ValueError as error:
+        st.error(str(error))
+    else:
+        if slot is None:
+            st.info("No free interval fits within this window.")
+        else:
+            st.success(f"Next available slot: {slot} on {slot_date} for {slot_duration} minutes.")
+
+st.subheader("Save and load")
+st.caption(
+    "Save data writes pets, tasks, completion history, and settings to data/pawpal.json. "
+    "Load replaces this session with the last save and discards unsaved changes. "
+    "Submit task edits before saving. This local file is shared by sessions on this server; "
+    "use this feature for a single-owner local app."
+)
+storage_notice = st.session_state.pop("storage_notice", None)
+if storage_notice:
+    kind, message = storage_notice
+    if kind == "error":
+        st.error(message)
+    else:
+        st.success(message)
+if st.button("Save data", key="save_data", disabled=not owner_name.strip() or not settings_valid):
+    try:
+        save_owner(owner)
+    except (OSError, ValueError) as error:
+        st.error(f"Could not save data: {error}")
+    else:
+        st.success("Saved pets, tasks, and settings to data/pawpal.json.")
+st.button("Load saved data", key="load_data", on_click=load_saved_data)

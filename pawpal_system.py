@@ -227,6 +227,50 @@ class Scheduler:
                 )
         return warnings
 
+    def next_available_slot(
+        self, owner: Owner, duration_minutes: int, start_time: str = "09:00",
+        end_time: str = "17:00", on_date: date | None = None,
+    ) -> str | None:
+        """Find the earliest free interval across pets without changing any task.
+
+        Pending timed tasks occupy [start, start + duration). Undated tasks use
+        on_date; dated tasks can spill into it from earlier days. Untimed and
+        completed tasks do not reserve time. The search stays within one day.
+        """
+        on_date = date.today() if on_date is None else on_date
+        if type(on_date) is not date:
+            raise ValueError("Search date must be a date.")
+        if type(duration_minutes) is not int or duration_minutes <= 0:
+            raise ValueError("Duration must be a positive whole number of minutes.")
+
+        def minutes(value: str, *, allow_midnight=False) -> int:
+            if allow_midnight and value == "24:00":
+                return 1440
+            if not isinstance(value, str) or re.fullmatch(r"(?:[01][0-9]|2[0-3]):[0-5][0-9]", value) is None:
+                raise ValueError("Use HH:MM times; only the window end may be 24:00.")
+            hour, minute = map(int, value.split(":"))
+            return hour * 60 + minute
+
+        candidate, window_end = minutes(start_time), minutes(end_time, allow_midnight=True)
+        if candidate >= window_end:
+            raise ValueError("Window end must be later than its start on the same day.")
+        intervals = []
+        for _, task in owner.get_all_tasks():
+            if task.completed or task.scheduled_time is None:
+                continue
+            day_offset = ((task.due_date or on_date) - on_date).days * 1440
+            start = day_offset + minutes(task.scheduled_time)
+            intervals.append((start, start + task.duration_minutes))
+        for start, end in sorted(intervals):
+            if end <= candidate:
+                continue
+            if candidate + duration_minutes <= start:
+                break
+            candidate = end
+        if candidate + duration_minutes > window_end:
+            return None
+        return f"{candidate // 60:02d}:{candidate % 60:02d}"
+
     def generate_plan(self, owner: Owner, on_date: date | None = None) -> dict[str, object]:
         """Return selected tasks, skipped tasks with reasons, and time totals."""
         on_date = date.today() if on_date is None else on_date

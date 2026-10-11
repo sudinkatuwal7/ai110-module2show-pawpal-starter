@@ -11,7 +11,7 @@ Their responsibilities are:
 - **Owner:** Stores the owner's name, time budget, short-task preference, and pets. It collects tasks across pets.
 - **Pet:** Stores pet information and manages its task list, including completion and adding the next recurring occurrence.
 - **Task:** Stores and validates the details of one care activity, including duration, priority, recurrence, scheduled time, due date, and completion date.
-- **Scheduler:** Builds the daily plan, sorts and filters task lists, and reports same-time conflicts.
+- **Scheduler:** Builds the daily plan, sorts and filters task lists, reports same-time conflicts, and finds the next available interval across pets.
 
 Owner manages pets, Pet contains tasks, and Scheduler uses their information. None of these classes needs to inherit from another. Keeping the Streamlit interface in app.py also lets me test the care logic without opening the app.
 
@@ -22,6 +22,8 @@ The four-class structure stayed, but the details grew during implementation. Tas
 Input validation, pet-task associations, and a consistent plan format are now implemented. Owner.get_all_tasks() returns pairs so a task stays connected to the right pet. The plan dictionary contains selected and skipped tasks, explanations, and time totals. Separate sorting, filtering, and conflict methods let me add features without changing that format.
 
 I kept the scope manageable for a short assignment. The Streamlit app now exposes the scheduling features without extra domain classes. It supports adding, viewing, editing pending tasks, and completing tasks. Editing uses the existing Task.update_details() method and keeps the same task object; removal remains a backend operation.
+
+The bonus follow-up adds storage functions in `persistence.py`, without a fifth domain class. Explicit JSON Save/Load retains pets, tasks, recurrence history and owner settings between runs. A validated load creates a new object graph, so the UI clears old editor references, drafts and plans before displaying it. Storage is a single local file, not a multi-user database.
 
 ---
 
@@ -41,7 +43,7 @@ I chose to keep conflict detection simple. The scheduler groups pending tasks by
 
 The tradeoff is that it detects identical starting times on the same date but does not detect overlapping intervals with different starting times. For example, tasks scheduled for 09:00–09:30 and 09:15–09:45 would not trigger a warning. I chose this approach for a short assignment because the dictionary grouping is easy to understand and test, while full overlap detection would need more logic and edge cases. I kept the explicit dictionary version because a shorter version would not improve what it detects.
 
-Later, I could combine each task's date and starting time, add its duration to calculate an ending time, and check whether two intervals overlap. I would add tests for partial overlaps, one task inside another, and tasks that cross midnight. Tasks that start exactly when another ends would not count as overlapping.
+The bonus follow-up uses duration intervals in a separate next-available-slot search. It sorts reservations and advances a candidate start past overlaps until a sufficiently long gap appears. Tests cover nested and partial overlaps, previous-day spillover, and touching endpoints. This improves the search for free space while leaving the original same-start warning and priority-plan behavior unchanged. A future improvement would use interval logic to report every existing overlap, not only avoid reservations when suggesting a new slot.
 
 ---
 
@@ -81,9 +83,9 @@ These checks matter because a plausible-looking schedule can still hide errors, 
 
 **b. Confidence**
 
-My confidence is 4 out of 5. The 116 passing tests support the behaviors that are implemented, but they are not proof that every possible interaction works. Conflict detection still does not check duration overlaps, and automated UI coverage does not replace a recorded visual browser or accessibility review.
+My confidence is 4 out of 5. After the bonus follow-up, 150 tests pass: the original 116 plus 34 persistence, interval-search and UI checks. These support the implemented behaviors, but they are not proof that every possible interaction works. The original conflict warning still checks only identical starts; free-slot search handles duration overlaps separately. Automated UI coverage does not replace a recorded visual browser or accessibility review.
 
-With more time, I would extend the repeatable UI tests to longer flows, such as completing tasks while changing filters, and review keyboard use and layout in a browser. If I added interval-overlap detection, I would test tasks inside other tasks, intervals crossing midnight, and tasks that meet at an endpoint without overlapping.
+With more time, I would extend repeatable UI tests to longer flows, such as completing tasks while changing filters, and review keyboard use and layout in a browser. The new persistence tests include a separate Python process and simulated failed writes, but they do not establish safe concurrent use or durability on every hosting platform.
 
 ---
 
@@ -95,7 +97,7 @@ The separation between the backend and UI worked well. Sorting, filtering, recur
 
 **b. What you would improve**
 
-With pending-task editing and its acceptance tests now integrated, I would next consider storage so pets and tasks survive beyond a Streamlit session. I would also consider full duration-overlap detection and broader browser testing. Before adding those features, I would define their behavior and edge cases so the implementation stays understandable instead of growing only because AI can generate more code.
+Pending-task editing, JSON storage and next-available-slot search are now implemented. I would next consider full duration-overlap warnings, per-user storage and broader browser testing. Before expanding those features, I would define their behavior and edge cases so the implementation stays understandable instead of growing only because AI can generate more code.
 
 **c. Key takeaway**
 

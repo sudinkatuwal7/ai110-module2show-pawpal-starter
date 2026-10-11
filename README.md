@@ -26,7 +26,7 @@ The logic layer in `pawpal_system.py` uses four classes. `Task` stores an activi
 
 The plan is a dictionary with `selected`, `skipped`, `total_minutes`, and `remaining_minutes`. Each selected or skipped entry contains `pet`, `task`, and `reason`. The plan allocates a total time budget; it does not assign or enforce appointment times. Chronological sorting and conflict detection are separate methods, so the plan dictionary stays unchanged.
 
-The backend has no Streamlit dependency. The app in `app.py` connects task entry, pending-task editing, sorting, filtering, completion, conflict warnings, and schedule generation to the backend. Data stays in the current Streamlit session; adding pets or tasks, saving changed task details, completing tasks, or changing scheduling settings clears the saved plan so it can be regenerated. Run the app with `streamlit run app.py`.
+The backend has no Streamlit dependency. The app in `app.py` connects task entry, pending-task editing, sorting, filtering, completion, conflict warnings, schedule generation, and free-time search to the backend. Live objects stay in session state; explicit JSON Save/Load controls preserve data between runs. Adding pets or tasks, saving changed task details, completing tasks, loading data, or changing scheduling settings clears the saved plan so it can be regenerated. Run the app with `streamlit run app.py`.
 
 Task inputs and owner scheduling settings are validated when created or updated through their methods. `main.py` demonstrates the system, and `tests/test_pawpal.py` checks completion, task addition, multi-pet scheduling through the Owner accessor, priorities, time limits, recurrence, and validation.
 
@@ -38,7 +38,62 @@ Task inputs and owner scheduling settings are validated when created or updated 
 - Choose `once`, `daily`, or `weekly` recurrence. Use **Complete today** buttons to record completion and automatically create the next daily or weekly occurrence.
 - See readable warnings for pending tasks with identical start times on the same effective date, including tasks belonging to different pets. Warnings check all tasks regardless of the display filters.
 - Edit a specific pending task in a form and save its title, duration, priority, recurrence, optional time, and due date together. Numbered labels distinguish tasks with matching names.
-- Use validated inputs, a backend covered by 97 pytest cases, and 19 Streamlit AppTest cases for pending-task editing. Task removal remains a backend method.
+- Save and load pets, tasks, completion history, and owner settings as JSON between runs.
+- Find the earliest available interval for an additional task, accounting for overlapping timed tasks across pets.
+- Use validated inputs and 150 pytest cases: the original 97 backend tests, 19 frozen editor tests, and 34 bonus-feature tests. Task removal remains a backend method.
+
+## Bonus rubric evidence
+
+| Category | Implementation and evidence |
+| --- | --- |
+| Advanced algorithm via Agent Mode | `Scheduler.next_available_slot()` searches occupied intervals; the [Agent Workflow](ai_interactions.md#agent-workflow-sf7) records the request, files, completion, and corrections. |
+| Data persistence | Versioned JSON `save_owner()` / `load_owner()` in `persistence.py`, Streamlit controls, and restart/failure tests. Workflow below. |
+| Advanced scheduling | Priority/time-budget planning plus duration-aware free-slot search; actual CLI examples below. |
+| Professional formatting | Streamlit tables, columns, forms, headings, emoji and status messages; specific APIs documented below. |
+| Prompt comparison | [Structured Strategy A/B comparison](ai_interactions.md#prompt-comparison-sf11) and preserved evidence. The experiment remains a tie; A was selected for its form experience. |
+
+## Saving and loading data
+
+1. Add pets/tasks, submit pending-task edits with **Save changes**, and set your scheduling preferences.
+2. At the bottom, click **Save data**. This writes `data/pawpal.json` relative to the project, using UTF-8 JSON. Saving again replaces the previous save.
+3. Close and restart the app with `streamlit run app.py`. Click **Load saved data** to restore the saved owner, pets, tasks, and settings. Loading is explicit, not automatic.
+4. Loading replaces the current session's data and discards unsaved changes and editor drafts. Generate the schedule again afterward. Save again after further changes you want to keep.
+
+The save includes owner name, time budget and short-task preference; pet name/species/breed; and every task's title, duration, priority, recurrence, scheduled time, due date and completion date. Dates use ISO `YYYY-MM-DD`, absent values use JSON `null`, and schema version is `1`. Plans and widget state are recomputed rather than stored. Names need not be unique; pet/task order and associations survive loading.
+
+Loading validates the entire document before replacing live data. Missing, malformed or unsupported saves show an error and leave the session intact. Saving validates before writing and replaces the file atomically using a temporary file in the same directory; a failed replacement preserves the previous save. The file must be on writable storage. This is single-owner local storage, shared by sessions on the same server; it has no accounts, locking, cloud backup, or merge support. The last successful save wins. Back up the JSON yourself if needed, and use persistent disk if deploying to a host whose local files are temporary. `/data/` is ignored by Git to keep personal pet data out of the repository.
+
+Persistence files added/modified: `persistence.py` (standard-library `json`, `pathlib`, `tempfile`, `os` and dataclass serialization), `app.py` (Save/Load and state reset), `.gitignore` (private data), and `tests/test_bonus_features.py` (round trips, a separate-process load, validation, failed writes, and UI restoration). No additional package is required.
+
+## Finding the next available slot
+
+Under **Find a free time**, choose a date, minutes needed and a same-day window, then click **Find next available slot**. Times use 24-hour `HH:MM`; the window end may be `24:00`. Enter the suggestion and search date when adding or editing a task. The search treats existing timed tasks, including the task being edited, as reservations; it is intended to find room for an additional task and does not automatically move or reserve anything.
+
+`Scheduler.next_available_slot()` collects all pets' pending timed intervals, sorts them by start and scans for the earliest gap of sufficient length. After an overlap, it moves the candidate start to the occupied interval's end. Nested and overlapping reservations are handled in the same scan. Touching endpoints are allowed. Completed and untimed tasks reserve no time. A dated task uses its due date; an undated task uses the search date. Earlier dated tasks can spill past midnight into the search day. Overdue appointments are not automatically moved to today, and future recurring occurrences are not invented. The window itself cannot cross midnight. Runtime is O(n log n), with O(n) additional space.
+
+The existing priority/budget plan and identical-start warning keep their original behavior. This new search accounts for duration overlaps when suggesting free space, but it does not repair existing conflicts or make the generated priority plan enforce appointment times.
+
+Actual output from `python main.py` after the existing demos:
+
+```text
+Next Available Slot Demo (09:00-11:00)
+Reserved: Biscuit 09:00-09:30; Mochi 09:15-09:45 and 10:00-10:15
+- 15 minutes: 09:45
+- 20 minutes: 10:15
+- 60 minutes: No available slot
+```
+
+## UI and output formatting
+
+| Feature | Functions / library used |
+| --- | --- |
+| Pet, browse, selected-task and skipped-task tables with named columns | Streamlit `st.table()` in `app.py` |
+| Grouped fields and batch editing | `st.columns()`, `st.form()`, `st.form_submit_button()` |
+| Page hierarchy, guidance and paw emoji | `st.set_page_config()`, `st.title()`, `st.subheader()`, `st.markdown()`, `st.caption()`, `st.expander()`, `st.divider()` |
+| Explicit validation, completion and storage feedback | `st.error()`, `st.warning()`, `st.success()`, `st.info()` |
+| Numbered CLI plan, priority/status labels, time totals and skipped reasons | Python f-strings, `enumerate()` and `print()` in `main()` and `print_tasks()` in `main.py` |
+
+The formatting uses the existing Streamlit dependency and Python standard library; no `tabulate` or terminal-color dependency is needed. Automated AppTest checks exercise the controls and output. Visual layout and keyboard accessibility have not received a manual browser review.
 
 ## Editing pending tasks
 
@@ -107,25 +162,26 @@ pytest --cov
 
 The tests cover chronological sorting (including minutes, tied times, and untimed tasks), filtering by pet and completion status, daily/weekly recurrence chains, and exact same-time conflict detection across pets and dates. They also check duplicate prevention by object identity, strict owner-setting validation, and rejected updates leaving settings unchanged. Edge cases include empty inputs, zero time budgets, invalid task details and times, completed tasks, repeated completion, leap days, and year changes.
 
-The integrated suite contains the original 97 backend cases plus 19 frozen UI acceptance cases in `tests/test_pending_task_editing.py`. The UI cases exercise real backend objects through Streamlit AppTest: task selection, draft switching, atomic saves, identity preservation, optional-field clearing, plan invalidation, sorting, warnings, recurrence, stale submissions, and empty states. AppTest is not a visual browser review.
+The current suite contains the unchanged original 97 backend cases, 19 frozen UI acceptance cases in `tests/test_pending_task_editing.py`, and 34 additional cases in `tests/test_bonus_features.py`. The frozen UI cases exercise real backend objects through Streamlit AppTest: task selection, draft switching, atomic saves, identity preservation, optional-field clearing, plan invalidation, sorting, warnings, recurrence, stale submissions, and empty states. Bonus tests cover persistence across processes, corrupt data, atomic save failure, date and interval boundaries, exhaustive small interval comparisons, and UI Save/Load/free-slot flows. AppTest is not a visual browser review.
 
 Run the suites separately or together without generating pytest cache files:
 
 ```bash
 python -m pytest tests/test_pawpal.py -p no:cacheprovider
 python -m pytest tests/test_pending_task_editing.py -p no:cacheprovider
+python -m pytest tests/test_bonus_features.py -p no:cacheprovider
 python -m pytest -p no:cacheprovider
 ```
 
 Strategy A integration verification on October 11, 2026 passed all 97 backend cases, all 19 acceptance cases, and all 116 cases together. The CLI demo and syntax checks also passed. [Actual integration commands and output](docs/prompt_comparison/integration-verification.json) are recorded separately from the experiment's original runs.
 
-The final submission-readiness run on October 11, 2026 also passed all 116 tests, the CLI demo, syntax checks, and staged/unstaged diff checks. Actual pytest output excerpt:
+The earlier submission-readiness run on October 11, 2026 passed all 116 then-existing tests, the CLI demo, syntax checks, and staged/unstaged diff checks. Historical pytest output excerpt:
 
 ```text
 ============================ 116 passed in 20.11s =============================
 ```
 
-See the [final audit](docs/submission_readiness.md) and [recorded verification output](docs/submission-verification.json). Personal paths in public logs are replaced with labelled placeholders; test outcomes are unchanged.
+See the [historical audit](docs/submission_readiness.md) and [recorded verification output](docs/submission-verification.json). The subsequent bonus-feature run passed **150 tests in 12.88s**, including all original 116. Its results and limits are recorded separately in [bonus verification](docs/bonus_verification.md). Personal paths in public logs are replaced with labelled placeholders; test outcomes are unchanged.
 
 Terminal output from the successful `python -m pytest` run for Phase 5 (historical 97-case run; the personal root path below is redacted):
 
@@ -144,7 +200,7 @@ tests\test_pawpal.py ................................................... [ 52%]
 
 This run completed without Windows cache-permission errors; no fallback was needed. If cache permissions interfere with a later run, use `python -m pytest -p no:cacheprovider` to run the same tests without pytest's cache plugin.
 
-**Confidence Level: 4/5 stars (★★★★☆).** The 97 backend tests and 19 editor acceptance cases provide coverage for the implemented behaviors. Exact-time conflict detection does not check overlapping task durations, and automated UI checks do not verify every browser interaction, visual layout, or accessibility concern.
+**Confidence Level: 4/5 stars (★★★★☆).** The 150 tests provide coverage for the implemented behaviors. The exact-time warning does not report all duration overlaps; the separate free-slot search accounts for them when finding an available interval. Automated UI checks do not verify every browser interaction, visual layout, or accessibility concern. JSON storage is local and intended for one owner.
 
 ## Smarter Scheduling
 
