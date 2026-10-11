@@ -1,0 +1,61 @@
+classDiagram
+    direction TB
+
+    %% Optional~T~ means T or None; PetTaskPair means a tuple of Pet and Task.
+    %% dict return types omit key/value annotations for Mermaid readability.
+    %% self, generated dataclass constructors, and validation hooks are omitted.
+    %% update_settings and update_details accept keyword-only arguments.
+    %% In update_details, ... preserves time/date; None explicitly clears them.
+
+    class Owner {
+        +str name
+        +int available_minutes
+        +bool prefer_short_tasks
+        +list~Pet~ pets
+        +add_pet(pet: Pet) None
+        +update_settings(available_minutes=None, prefer_short_tasks=None) None
+        +get_all_tasks() list~PetTaskPair~
+    }
+
+    class Pet {
+        +str name
+        +str species
+        +str breed
+        +list~Task~ tasks
+        +add_task(task: Task) None
+        +remove_task(task: Task) None
+        +complete_task(task: Task, on_date=None) Optional~Task~
+    }
+
+    class Task {
+        +str name
+        +int duration_minutes
+        +str priority
+        +str recurrence
+        +Optional~date~ last_completed_date
+        +Optional~str~ scheduled_time
+        +Optional~date~ due_date
+        +bool completed
+        +update_details(name=None, duration_minutes=None, priority=None, recurrence=None, scheduled_time=..., due_date=...) None
+        +is_due(on_date=None) bool
+        +mark_complete(on_date=None) None
+    }
+
+    class Scheduler {
+        +dict priority_order$
+        +sort_tasks_by_time(task_pairs: list~PetTaskPair~) list~PetTaskPair~
+        +filter_tasks(owner: Owner, pet_name=None, completed=None) list~PetTaskPair~
+        +detect_conflicts(task_pairs: list~PetTaskPair~, on_date=None) list~str~
+        +generate_plan(owner: Owner, on_date=None) dict
+    }
+
+    %% Aggregation describes stored collections, not exclusive lifetime ownership.
+    Owner o-- "0..*" Pet : manages
+    Pet o-- "0..*" Task : contains
+    Scheduler ..> Owner : reads settings and task pairs
+    Scheduler ..> Pet : preserves pet associations in task pairs
+    Scheduler ..> Task : sorts, filters, checks conflicts, and plans
+
+    note for Task "completed is a read-only property derived from last_completed_date. scheduled_time uses HH:MM. Recurrence is once, daily, or weekly."
+    note for Pet "complete_task completes the original and adds a daily or weekly next occurrence based on the completion date. Repeated completion adds nothing."
+    note for Scheduler "Conflict detection checks identical start times on the same effective date, not duration overlaps. It is separate from generate_plan."

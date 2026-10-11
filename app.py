@@ -1,6 +1,21 @@
+from datetime import date
+
 import streamlit as st
 
 from pawpal_system import Owner, Pet, Scheduler, Task
+
+
+def complete_task_today(pet: Pet, task: Task) -> None:
+    """Complete a task once, clear the old plan, and save a success message."""
+    if task.completed:
+        return
+    next_task = pet.complete_task(task, on_date=date.today())
+    st.session_state.pop("plan", None)
+    message = f"Completed {pet.name}: {task.name}."
+    if next_task is not None:
+        message += f" Next {next_task.recurrence} occurrence is due {next_task.due_date}."
+    st.session_state.completion_notice = message
+
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -10,6 +25,7 @@ if "scheduler" not in st.session_state:
     st.session_state.scheduler = Scheduler()
 
 owner = st.session_state.owner
+scheduler = st.session_state.scheduler
 
 st.title("🐾 PawPal+")
 
@@ -34,7 +50,9 @@ with st.expander("How to use PawPal+", expanded=True):
     st.markdown(
         """
 - Add your pets and select a pet when adding a task.
-- Set each task's duration and priority.
+- Set each task's duration, priority, and recurrence; optionally add a time and due date.
+- Browse tasks by time, filter by pet or completion status, and review same-time warnings.
+- Mark tasks complete today; daily and weekly tasks create their next occurrence automatically.
 - Choose your available time and generate a plan for all your pets.
 - Review selected tasks and explanations for anything skipped.
 """
@@ -71,7 +89,10 @@ else:
     st.info("No pets yet. Add a pet above to start adding care tasks.")
 
 st.markdown("### Tasks")
-st.caption("Select a pet and add a care task with its duration and priority.")
+st.caption("Select a pet and add a care task. Leave the time or due date blank when not needed.")
+completion_notice = st.session_state.pop("completion_notice", None)
+if completion_notice:
+    st.success(completion_notice)
 if owner.pets and st.session_state.get("selected_pet") is None:
     st.session_state.selected_pet = 0
 selected_pet_index = st.selectbox(
@@ -92,9 +113,30 @@ with col2:
 with col3:
     priority = st.selectbox("Priority", ["low", "medium", "high"], index=2, key="priority")
 
+col1, col2, col3 = st.columns(3)
+with col1:
+    scheduled_time = st.text_input(
+        "Scheduled time (optional)", placeholder="HH:MM", key="scheduled_time",
+        help="Use 24-hour time, such as 09:05 or 18:30. Leave blank for an untimed task.",
+    )
+with col2:
+    recurrence = st.selectbox("Recurrence", ["once", "daily", "weekly"], key="recurrence")
+with col3:
+    due_date = st.date_input(
+        "Due date (optional)", value=None, key="due_date",
+        help="Future tasks are skipped in today's plan. Undated pending tasks are eligible today.",
+    )
+
 if st.button("Add task", disabled=selected_pet_index is None, key="add_task"):
     try:
-        task = Task(name=task_title, duration_minutes=int(duration), priority=priority)
+        task = Task(
+            name=task_title,
+            duration_minutes=int(duration),
+            priority=priority,
+            scheduled_time=scheduled_time.strip() or None,
+            recurrence=recurrence,
+            due_date=due_date,
+        )
         owner.pets[selected_pet_index].add_task(task)
     except ValueError as error:
         st.error(str(error))
@@ -103,14 +145,69 @@ if st.button("Add task", disabled=selected_pet_index is None, key="add_task"):
         st.success(f"Added {task.name} for {owner.pets[selected_pet_index].name}.")
 
 task_pairs = owner.get_all_tasks()
+st.markdown("### Browse tasks")
+col1, col2 = st.columns(2)
+with col1:
+    pet_filter = st.text_input(
+        "Filter by pet name", key="pet_filter",
+        help="Leave blank for all pets. Matches the full name, ignoring case.",
+    )
+with col2:
+    status_filter = st.selectbox(
+        "Completion status", ["All", "Pending", "Completed"], key="status_filter",
+    )
+completed_filter = {"All": None, "Pending": False, "Completed": True}[status_filter]
+visible_pairs = scheduler.sort_tasks_by_time(
+    scheduler.filter_tasks(owner, pet_name=pet_filter.strip() or None, completed=completed_filter)
+)
+st.caption("Sorted by scheduled time of day; untimed tasks appear last. Filters only affect this list.")
 if task_pairs:
-    st.write("Current tasks:")
-    st.table([
-        {"Pet": pet.name, "Task": task.name, "Minutes": task.duration_minutes, "Priority": task.priority}
-        for pet, task in task_pairs
-    ])
+    if visible_pairs:
+        st.table([
+            {
+                "Time": task.scheduled_time or "Untimed",
+                "Pet": pet.name,
+                "Task": task.name,
+                "Minutes": task.duration_minutes,
+                "Priority": task.priority,
+                "Recurrence": task.recurrence,
+                "Due date": str(task.due_date) if task.due_date else "No date",
+                "Status": "Completed" if task.completed else "Pending",
+            }
+            for pet, task in visible_pairs
+        ])
+        pending_pairs = [(pet, task) for pet, task in visible_pairs if not task.completed]
+        if pending_pairs:
+            with st.expander("Complete a task"):
+                st.caption(
+                    "Completion is recorded for today. Daily and weekly tasks create one new "
+                    "occurrence due one or seven days after completion."
+                )
+                for pet, task in pending_pairs:
+                    # Object identity keeps each button tied to its task after sorting or filtering.
+                    st.button(
+                        f"Complete today: {pet.name} - {task.name} "
+                        f"({task.scheduled_time or 'Untimed'}, due {task.due_date or 'No date'})",
+                        key=f"complete_task_{id(task)}",
+                        on_click=complete_task_today,
+                        args=(pet, task),
+                    )
+    else:
+        st.info("No tasks match these filters.")
 else:
     st.info("No tasks yet. Select a pet and add a task above.")
+
+st.markdown("### Same-time conflicts")
+st.caption(
+    "Checks all pending tasks across pets and dates, regardless of the filters above. "
+    "Tasks without a due date use today. Only identical start times on the same date "
+    "are checked; overlapping durations with different start times are not detected."
+)
+conflicts = scheduler.detect_conflicts(task_pairs, on_date=date.today())
+for warning in conflicts:
+    st.warning(warning)
+if task_pairs and not conflicts:
+    st.info("No identical-start-time conflicts found.")
 
 st.divider()
 
@@ -142,7 +239,7 @@ if st.button(
     key="generate_schedule",
 ):
     try:
-        st.session_state.plan = st.session_state.scheduler.generate_plan(owner)
+        st.session_state.plan = scheduler.generate_plan(owner)
     except ValueError as error:
         st.session_state.pop("plan", None)
         st.error(str(error))
@@ -157,6 +254,7 @@ if plan is not None:
                 "Order": number,
                 "Pet": entry["pet"].name,
                 "Task": entry["task"].name,
+                "Time": entry["task"].scheduled_time or "Untimed",
                 "Minutes": entry["task"].duration_minutes,
                 "Priority": entry["task"].priority,
                 "Why selected": entry["reason"],
