@@ -1,0 +1,383 @@
+[
+  {
+    "label": "main-head",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-head.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-head.stderr.txt"
+  },
+  {
+    "label": "main-branch",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-branch.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-branch.stderr.txt"
+  },
+  {
+    "label": "main-status-before",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-status-before.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-status-before.stderr.txt"
+  },
+  {
+    "label": "tracked-paths",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "ls-files"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\tracked-paths.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\tracked-paths.stderr.txt"
+  },
+  {
+    "label": "baseline-pytest",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pawpal.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\baseline-pytest.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\baseline-pytest.stderr.txt"
+  },
+  {
+    "label": "a-head",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-head.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-head.stderr.txt"
+  },
+  {
+    "label": "a-branch",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-branch.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-branch.stderr.txt"
+  },
+  {
+    "label": "a-status-before",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-status-before.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-status-before.stderr.txt"
+  },
+  {
+    "label": "a-baseline-pytest",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pawpal.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-baseline-pytest.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-baseline-pytest.stderr.txt"
+  },
+  {
+    "label": "a-acceptance-collection",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pending_task_editing.py",
+      "--collect-only",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-acceptance-collection.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-acceptance-collection.stderr.txt"
+  },
+  {
+    "label": "a-diff-check",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-diff-check.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-diff-check.stderr.txt"
+  },
+  {
+    "label": "a-tracked-diff",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "diff",
+      "--name-only",
+      "98805949bffcb69f5e5299a4deaafe6b8bdb3623"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-tracked-diff.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-tracked-diff.stderr.txt"
+  },
+  {
+    "label": "a-status-after",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-status-after.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\a-status-after.stderr.txt"
+  },
+  {
+    "label": "b-head",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-head.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-head.stderr.txt"
+  },
+  {
+    "label": "b-branch",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-branch.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-branch.stderr.txt"
+  },
+  {
+    "label": "b-status-before",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-status-before.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-status-before.stderr.txt"
+  },
+  {
+    "label": "b-baseline-pytest",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pawpal.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-baseline-pytest.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-baseline-pytest.stderr.txt"
+  },
+  {
+    "label": "b-acceptance-collection",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pending_task_editing.py",
+      "--collect-only",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-acceptance-collection.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-acceptance-collection.stderr.txt"
+  },
+  {
+    "label": "b-diff-check",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-diff-check.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-diff-check.stderr.txt"
+  },
+  {
+    "label": "b-tracked-diff",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "diff",
+      "--name-only",
+      "98805949bffcb69f5e5299a4deaafe6b8bdb3623"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-tracked-diff.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-tracked-diff.stderr.txt"
+  },
+  {
+    "label": "b-status-after",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-status-after.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\b-status-after.stderr.txt"
+  },
+  {
+    "label": "worktrees",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "worktree",
+      "list",
+      "--porcelain"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\worktrees.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\worktrees.stderr.txt"
+  },
+  {
+    "label": "main-diff-check",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-diff-check.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-diff-check.stderr.txt"
+  },
+  {
+    "label": "main-status-after",
+    "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "stdout": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-status-after.stdout.txt",
+    "stderr": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\logs\\main-status-after.stderr.txt"
+  }
+]

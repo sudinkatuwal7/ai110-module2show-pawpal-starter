@@ -1,2 +1,3 @@
-streamlit>=1.30
-pytest>=7.0
+# Versions used for the verified 116-test submission.
+streamlit==1.60.0
+pytest==9.1.1

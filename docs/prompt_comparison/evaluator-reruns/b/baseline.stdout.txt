@@ -1,0 +1,10 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: <USER_HOME>\AppData\Local\Temp\pawpal-prompt-comparison-9880594\prompt-b
+plugins: anyio-4.12.1
+collected 97 items
+
+tests\test_pawpal.py ................................................... [ 52%]
+..............................................                           [100%]
+
+============================= 97 passed in 0.18s ==============================

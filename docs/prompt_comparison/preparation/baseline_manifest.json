@@ -1,0 +1,73 @@
+{
+  "commit": "98805949bffcb69f5e5299a4deaafe6b8bdb3623",
+  "original_repository": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+  "original_tracked_sha256": {
+    ".gitignore": "200157faebe478867e7eafeda1c77794632d91744fe0795a689aa5d3deee42f7",
+    "README.md": "02c46df80f201ab8739bac28e64469130be4482e6436afe39b845c59b0319392",
+    "__pycache__/pawpal_system.cpython-314.pyc": "a536632bf910a08c942733c5248494bba6b3665f4630c591632d7f1754d5904f",
+    "ai_interactions.md": "86067b6bbd056149e375cab231ff98ebfee940d59ebb160b72042a15045a4ffd",
+    "app.py": "2e516ce3e70d1cce5ffe2b00fc43fbd6d5a7ad6199046b7c35c7a4ea622f3358",
+    "diagrams/uml.mmd": "814bc345de6f2a5ac65dbf11bbbf1fd5dcea3441707d5320311d7d09d5704423",
+    "diagrams/uml_draft.mmd": "01b84a2ccf2a9835a0fbae92e152efd0888b7802afadad1109bc45229f82a19a",
+    "diagrams/uml_final.mmd": "e77906fdd7c8d5c40f004d4f539767156a955a52578668eafea5c8085299686b",
+    "main.py": "1eaee2d64ae24f7d4979ffe45d53ecb1006ce8eeff468868aa1202bc69d3d3d5",
+    "pawpal_system.py": "10370efe3d763ca238d2156f8c37f0d935d7498ff6d5121ccbc52bc7b14e6c01",
+    "reflection.md": "69ac1d2807941d111c0ad1fee24d9f1a83be0563d97c45d4bb3da6b404d57315",
+    "requirements.txt": "9355fd11dc2ca5dea264fd2b413b00ce6924216245e2363bd68db3a44de6c4ed",
+    "tests/test_pawpal.py": "a22025da24035b391db58aa32fba748c260882f2a03bc2977e85990b5e7209c5"
+  },
+  "candidates": {
+    "a": {
+      "path": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "branch": "experiment/prompt-a",
+      "starting_sha256": {
+        ".gitignore": "200157faebe478867e7eafeda1c77794632d91744fe0795a689aa5d3deee42f7",
+        "README.md": "a555f0416d216d813081e88c4f2328852071f53924744cc15c3b4abaf1724fdc",
+        "__pycache__/pawpal_system.cpython-314.pyc": "a536632bf910a08c942733c5248494bba6b3665f4630c591632d7f1754d5904f",
+        "ai_interactions.md": "86067b6bbd056149e375cab231ff98ebfee940d59ebb160b72042a15045a4ffd",
+        "app.py": "549d0f0ef12092da272ed526a3a57a03aa2e897205e82a6369f3888e2e6e3edd",
+        "diagrams/uml.mmd": "814bc345de6f2a5ac65dbf11bbbf1fd5dcea3441707d5320311d7d09d5704423",
+        "diagrams/uml_draft.mmd": "65837a7a8549a0ef9469255feffdae329fa25b8edb025f50f220b959b65a0157",
+        "diagrams/uml_final.mmd": "eee053a85f13a4ba079938b7206e848868df88508355afd2402e26bc5817b0d4",
+        "main.py": "f583e6666d4626c266726f842d2fccaf9b825eb88521d6c4fb62422fb9c32e61",
+        "pawpal_system.py": "6dcf512e5b7cbba430b72b420761c089d6b5e830d2ede951601485ed13c8cb3f",
+        "reflection.md": "109860b27d3578b65852f27b03297c9f5857b700b9ae6a372e0268c3c64aa6e4",
+        "requirements.txt": "9355fd11dc2ca5dea264fd2b413b00ce6924216245e2363bd68db3a44de6c4ed",
+        "tests/test_pawpal.py": "cd0e58a3c84962b51cc2a7c6790674d090f925b598051de2f8ba6ccbf32d74c4",
+        "tests/test_pending_task_editing.py": "45d647dc974fef19630b45f26df20593e97dfe860eddc2e717194be75916b012"
+      }
+    },
+    "b": {
+      "path": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "branch": "experiment/prompt-b",
+      "starting_sha256": {
+        ".gitignore": "200157faebe478867e7eafeda1c77794632d91744fe0795a689aa5d3deee42f7",
+        "README.md": "a555f0416d216d813081e88c4f2328852071f53924744cc15c3b4abaf1724fdc",
+        "__pycache__/pawpal_system.cpython-314.pyc": "a536632bf910a08c942733c5248494bba6b3665f4630c591632d7f1754d5904f",
+        "ai_interactions.md": "86067b6bbd056149e375cab231ff98ebfee940d59ebb160b72042a15045a4ffd",
+        "app.py": "549d0f0ef12092da272ed526a3a57a03aa2e897205e82a6369f3888e2e6e3edd",
+        "diagrams/uml.mmd": "814bc345de6f2a5ac65dbf11bbbf1fd5dcea3441707d5320311d7d09d5704423",
+        "diagrams/uml_draft.mmd": "65837a7a8549a0ef9469255feffdae329fa25b8edb025f50f220b959b65a0157",
+        "diagrams/uml_final.mmd": "eee053a85f13a4ba079938b7206e848868df88508355afd2402e26bc5817b0d4",
+        "main.py": "f583e6666d4626c266726f842d2fccaf9b825eb88521d6c4fb62422fb9c32e61",
+        "pawpal_system.py": "6dcf512e5b7cbba430b72b420761c089d6b5e830d2ede951601485ed13c8cb3f",
+        "reflection.md": "109860b27d3578b65852f27b03297c9f5857b700b9ae6a372e0268c3c64aa6e4",
+        "requirements.txt": "9355fd11dc2ca5dea264fd2b413b00ce6924216245e2363bd68db3a44de6c4ed",
+        "tests/test_pawpal.py": "cd0e58a3c84962b51cc2a7c6790674d090f925b598051de2f8ba6ccbf32d74c4",
+        "tests/test_pending_task_editing.py": "45d647dc974fef19630b45f26df20593e97dfe860eddc2e717194be75916b012"
+      }
+    }
+  },
+  "acceptance_test_sha256": "45d647dc974fef19630b45f26df20593e97dfe860eddc2e717194be75916b012",
+  "common_prompt_prefix_sha256": "8c2e44502b9a3e1081ac994378a493abcca991d4a47d50c9b852832ff2657dcf",
+  "original_vs_checkout_byte_differences": [
+    "README.md",
+    "app.py",
+    "diagrams/uml_draft.mmd",
+    "diagrams/uml_final.mmd",
+    "main.py",
+    "pawpal_system.py",
+    "reflection.md",
+    "tests/test_pawpal.py"
+  ]
+}

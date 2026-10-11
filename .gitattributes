@@ -1,0 +1,6 @@
+# Preserve the exact bytes covered by the public evidence hash manifest.
+docs/prompt_comparison/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Frozen captures can contain intentional output spacing and blank lines.
+docs/prompt_comparison/original/** -whitespace
+docs/prompt_comparison/preparation/** -whitespace
+docs/prompt_comparison/evaluator-reruns/** -whitespace

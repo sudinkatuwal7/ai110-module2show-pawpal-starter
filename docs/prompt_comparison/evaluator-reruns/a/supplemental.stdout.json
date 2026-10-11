@@ -1,0 +1,105 @@
+{
+  "candidate_root": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+  "local_test_date": "2026-10-11",
+  "results": [
+    {
+      "probe": "invalid_duration",
+      "value": null,
+      "exceptions": [],
+      "tasks_unchanged": false,
+      "plan_retained": false,
+      "errors": [],
+      "successes": [
+        "Saved changes to Mochi: Proposed title."
+      ],
+      "info": [
+        "No identical-start-time conflicts found.",
+        "Generate a schedule after adding tasks or changing your care settings."
+      ],
+      "saved_title": "Proposed title",
+      "saved_duration": 1,
+      "atomic_rejection": false
+    },
+    {
+      "probe": "invalid_duration",
+      "value": 0,
+      "exceptions": [],
+      "tasks_unchanged": false,
+      "plan_retained": false,
+      "errors": [],
+      "successes": [
+        "Saved changes to Mochi: Proposed title."
+      ],
+      "info": [
+        "No identical-start-time conflicts found.",
+        "Generate a schedule after adding tasks or changing your care settings."
+      ],
+      "saved_title": "Proposed title",
+      "saved_duration": 1,
+      "atomic_rejection": false
+    },
+    {
+      "probe": "invalid_duration",
+      "value": -1,
+      "exceptions": [],
+      "tasks_unchanged": false,
+      "plan_retained": false,
+      "errors": [],
+      "successes": [
+        "Saved changes to Mochi: Proposed title."
+      ],
+      "info": [
+        "No identical-start-time conflicts found.",
+        "Generate a schedule after adding tasks or changing your care settings."
+      ],
+      "saved_title": "Proposed title",
+      "saved_duration": 1,
+      "atomic_rejection": false
+    },
+    {
+      "probe": "invalid_duration",
+      "value": 2.5,
+      "exceptions": [],
+      "tasks_unchanged": false,
+      "plan_retained": false,
+      "errors": [],
+      "successes": [
+        "Saved changes to Mochi: Proposed title."
+      ],
+      "info": [
+        "No identical-start-time conflicts found.",
+        "Generate a schedule after adding tasks or changing your care settings."
+      ],
+      "saved_title": "Proposed title",
+      "saved_duration": 2,
+      "atomic_rejection": false
+    },
+    {
+      "probe": "last_pending_completed_before_save",
+      "exceptions": [],
+      "tasks_unchanged": true,
+      "plan_retained": true,
+      "errors": [
+        "This task is completed or no longer available. Select a pending task."
+      ],
+      "successes": [],
+      "info": [
+        "No pending tasks to edit. Add a care task or view your completed tasks below.",
+        "No identical-start-time conflicts found."
+      ],
+      "active_save_buttons": 0
+    },
+    {
+      "probe": "repeated_rename_nonfirst_task",
+      "exceptions": [],
+      "first_unchanged": true,
+      "second_updated": true,
+      "same_objects": true
+    },
+    {
+      "probe": "date_control_bounds",
+      "minimum": "2016-10-11",
+      "maximum": "2036-10-11"
+    }
+  ]
+}

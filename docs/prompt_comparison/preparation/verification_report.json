@@ -1,0 +1,183 @@
+{
+  "verified_at_utc": "2026-10-11T21:58:26.548080+00:00",
+  "invocation": [
+    "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\preparation\\verify_preparation.py",
+    "--freeze"
+  ],
+  "checks": [
+    "Original main is clean at the baseline; every original tracked hash is unchanged",
+    "Candidate A: baseline HEAD/branch, no tracked changes, supplied test only, hashes and syntax OK",
+    "Candidate B: baseline HEAD/branch, no tracked changes, supplied test only, hashes and syntax OK",
+    "Both candidates match byte-for-byte across 14 controlled files",
+    "Prompts embed the same 12-criterion specification and full tests; only strategy endings differ",
+    "Recorded checks: main/A/B baseline each 97 passed; A/B collected the same 19 acceptance cases",
+    "Original versus checkout byte differences are verified line endings only",
+    "Frozen archive hashes verified for 62 artifacts",
+    "Candidate implementation and acceptance execution remain NOT RUN during preparation"
+  ],
+  "git_commands": [
+    {
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "98805949bffcb69f5e5299a4deaafe6b8bdb3623\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exit_code": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "98805949bffcb69f5e5299a4deaafe6b8bdb3623\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exit_code": 0,
+      "stdout": "experiment/prompt-a\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "98805949bffcb69f5e5299a4deaafe6b8bdb3623"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "?? tests/test_pending_task_editing.py\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "98805949bffcb69f5e5299a4deaafe6b8bdb3623\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "argv": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exit_code": 0,
+      "stdout": "experiment/prompt-b\n",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "98805949bffcb69f5e5299a4deaafe6b8bdb3623"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "?? tests/test_pending_task_editing.py\n",
+      "stderr": ""
+    }
+  ],
+  "candidate_implementation_status": {
+    "A": "NOT RUN",
+    "B": "NOT RUN"
+  },
+  "acceptance_execution_status": "NOT RUN; syntax and collection only",
+  "unresolved_preparation_blockers": []
+}

@@ -1,0 +1,139 @@
+{
+  "evaluated_at": "2026-10-11T17:16:27.546374-05:00",
+  "frozen_archive_hash_checks": {
+    "acceptance_coverage.md": true,
+    "baseline_manifest.json": true,
+    "checkout_line_endings.json": true,
+    "commands.json": true,
+    "comparison_template.md": true,
+    "environment.json": true,
+    "logs/a-acceptance-collection.stderr.txt": true,
+    "logs/a-acceptance-collection.stdout.txt": true,
+    "logs/a-baseline-pytest.stderr.txt": true,
+    "logs/a-baseline-pytest.stdout.txt": true,
+    "logs/a-branch.stderr.txt": true,
+    "logs/a-branch.stdout.txt": true,
+    "logs/a-diff-check.stderr.txt": true,
+    "logs/a-diff-check.stdout.txt": true,
+    "logs/a-head.stderr.txt": true,
+    "logs/a-head.stdout.txt": true,
+    "logs/a-status-after.stderr.txt": true,
+    "logs/a-status-after.stdout.txt": true,
+    "logs/a-status-before.stderr.txt": true,
+    "logs/a-status-before.stdout.txt": true,
+    "logs/a-tracked-diff.stderr.txt": true,
+    "logs/a-tracked-diff.stdout.txt": true,
+    "logs/b-acceptance-collection.stderr.txt": true,
+    "logs/b-acceptance-collection.stdout.txt": true,
+    "logs/b-baseline-pytest.stderr.txt": true,
+    "logs/b-baseline-pytest.stdout.txt": true,
+    "logs/b-branch.stderr.txt": true,
+    "logs/b-branch.stdout.txt": true,
+    "logs/b-diff-check.stderr.txt": true,
+    "logs/b-diff-check.stdout.txt": true,
+    "logs/b-head.stderr.txt": true,
+    "logs/b-head.stdout.txt": true,
+    "logs/b-status-after.stderr.txt": true,
+    "logs/b-status-after.stdout.txt": true,
+    "logs/b-status-before.stderr.txt": true,
+    "logs/b-status-before.stdout.txt": true,
+    "logs/b-tracked-diff.stderr.txt": true,
+    "logs/b-tracked-diff.stdout.txt": true,
+    "logs/baseline-pytest.stderr.txt": true,
+    "logs/baseline-pytest.stdout.txt": true,
+    "logs/main-branch.stderr.txt": true,
+    "logs/main-branch.stdout.txt": true,
+    "logs/main-diff-check.stderr.txt": true,
+    "logs/main-diff-check.stdout.txt": true,
+    "logs/main-head.stderr.txt": true,
+    "logs/main-head.stdout.txt": true,
+    "logs/main-status-after.stderr.txt": true,
+    "logs/main-status-after.stdout.txt": true,
+    "logs/main-status-before.stderr.txt": true,
+    "logs/main-status-before.stdout.txt": true,
+    "logs/tracked-paths.stderr.txt": true,
+    "logs/tracked-paths.stdout.txt": true,
+    "logs/worktrees.stderr.txt": true,
+    "logs/worktrees.stdout.txt": true,
+    "preparation_issues.md": true,
+    "prepare_artifacts.py": true,
+    "prompt_a.txt": true,
+    "prompt_b.txt": true,
+    "README.md": true,
+    "shared_spec.md": true,
+    "test_pending_task_editing.py": true,
+    "verify_preparation.py": true
+  },
+  "preparation_test_archive_mapping": {
+    "test_pending_task_editing.py": "preparation/test_pending_task_editing.py.txt"
+  },
+  "shared_prompt_prefix_identical": true,
+  "shared_prompt_prefix_sha256": "549d365e62a8cff32db710250080544a1fe02de71dbed4d5061d920ac7f39ad1",
+  "recorded_dependency_changes": {},
+  "metrics": {
+    "a": {
+      "added_lines": 116,
+      "removed_lines": 0,
+      "total_lines": 392,
+      "functions": [
+        {
+          "name": "complete_task_today",
+          "start_line": 8,
+          "end_line": 17,
+          "lines": 10
+        },
+        {
+          "name": "load_task_editor",
+          "start_line": 20,
+          "end_line": 28,
+          "lines": 9
+        },
+        {
+          "name": "save_pending_task",
+          "start_line": 31,
+          "end_line": 67,
+          "lines": 37
+        }
+      ],
+      "original_request_at": "2026-10-11T22:01:21.706Z",
+      "original_final_at": "2026-10-11T22:05:16.891Z",
+      "wall_seconds_request_to_final": 235.185,
+      "prior_task_requests": 16
+    },
+    "b": {
+      "added_lines": 98,
+      "removed_lines": 0,
+      "total_lines": 374,
+      "functions": [
+        {
+          "name": "complete_task_today",
+          "start_line": 8,
+          "end_line": 17,
+          "lines": 10
+        },
+        {
+          "name": "load_task_editor",
+          "start_line": 20,
+          "end_line": 28,
+          "lines": 9
+        },
+        {
+          "name": "save_task_changes",
+          "start_line": 31,
+          "end_line": 63,
+          "lines": 33
+        },
+        {
+          "name": "render_task_editor",
+          "start_line": 66,
+          "end_line": 114,
+          "lines": 49
+        }
+      ],
+      "original_request_at": "2026-10-11T22:06:57.042Z",
+      "original_final_at": "2026-10-11T22:09:48.618Z",
+      "wall_seconds_request_to_final": 171.576,
+      "prior_task_requests": 0
+    }
+  }
+}

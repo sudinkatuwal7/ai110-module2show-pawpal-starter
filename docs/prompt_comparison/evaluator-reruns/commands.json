@@ -1,0 +1,332 @@
+[
+  {
+    "candidate": "a",
+    "label": "baseline",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pawpal.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:12:53.519709-05:00",
+    "elapsed_seconds": 0.6517799000139348,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\baseline.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\baseline.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "acceptance",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pending_task_editing.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:12:54.180094-05:00",
+    "elapsed_seconds": 11.001819400000386,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\acceptance.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\acceptance.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "combined",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:05.200821-05:00",
+    "elapsed_seconds": 11.308456899947487,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\combined.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\combined.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "demo",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "main.py"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.511401-05:00",
+    "elapsed_seconds": 0.09334690001560375,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\demo.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\demo.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "syntax",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-c",
+      "from pathlib import Path; compile(Path('app.py').read_text(encoding='utf-8'), 'app.py', 'exec'); print('app.py syntax OK')"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.606111-05:00",
+    "elapsed_seconds": 0.07349819998489693,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\syntax.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\syntax.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "diff-check",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-a",
+      "diff",
+      "--check"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.682435-05:00",
+    "elapsed_seconds": 0.02374000003328547,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\diff-check.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\diff-check.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "diff-stat",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-a",
+      "diff",
+      "--stat"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.707528-05:00",
+    "elapsed_seconds": 0.024919999996200204,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\diff-stat.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\diff-stat.stderr.txt"
+  },
+  {
+    "candidate": "a",
+    "label": "status",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-a",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-a",
+      "status",
+      "--short"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.734426-05:00",
+    "elapsed_seconds": 0.027714499970898032,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\a\\status.stdout.txt",
+    "stderr": "evaluator-reruns\\a\\status.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "baseline",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pawpal.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:16.769262-05:00",
+    "elapsed_seconds": 0.647991300036665,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\baseline.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\baseline.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "acceptance",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pending_task_editing.py",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:17.419441-05:00",
+    "elapsed_seconds": 10.913581100001466,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\acceptance.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\acceptance.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "combined",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:28.335494-05:00",
+    "elapsed_seconds": 11.04673159995582,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\combined.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\combined.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "demo",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "main.py"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:39.384412-05:00",
+    "elapsed_seconds": 0.08262840000679716,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\demo.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\demo.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "syntax",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-c",
+      "from pathlib import Path; compile(Path('app.py').read_text(encoding='utf-8'), 'app.py', 'exec'); print('app.py syntax OK')"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:39.468905-05:00",
+    "elapsed_seconds": 0.06878279999364167,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\syntax.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\syntax.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "diff-check",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-b",
+      "diff",
+      "--check"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:39.539566-05:00",
+    "elapsed_seconds": 0.02426129998639226,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\diff-check.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\diff-check.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "diff-stat",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-b",
+      "diff",
+      "--stat"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:39.581982-05:00",
+    "elapsed_seconds": 0.025426699954550713,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\diff-stat.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\diff-stat.stderr.txt"
+  },
+  {
+    "candidate": "b",
+    "label": "status",
+    "cwd": "<USER_HOME>\\AppData\\Local\\Temp\\pawpal-prompt-comparison-9880594\\prompt-b",
+    "argv": [
+      "git",
+      "-c",
+      "safe.directory=<USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-b",
+      "status",
+      "--short"
+    ],
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "started_at": "2026-10-11T17:13:39.609397-05:00",
+    "elapsed_seconds": 0.027451800007838756,
+    "local_test_date": "2026-10-11",
+    "exit_code": 0,
+    "stdout": "evaluator-reruns\\b\\status.stdout.txt",
+    "stderr": "evaluator-reruns\\b\\status.stderr.txt"
+  }
+]

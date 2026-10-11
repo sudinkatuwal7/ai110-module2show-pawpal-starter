@@ -1,0 +1,9 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: <USER_HOME>\AppData\Local\Temp\pawpal-prompt-comparison-9880594\prompt-a
+plugins: anyio-4.12.1
+collected 19 items
+
+tests\test_pending_task_editing.py ...................                   [100%]
+
+============================= 19 passed in 10.28s =============================

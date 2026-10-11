@@ -1,0 +1,46 @@
+Today's Schedule
+Owner: Jordan | Available time: 40 min
+
+1. Mochi: Feeding (5 min) [high]
+   High priority; fits the remaining time.
+2. Biscuit: Morning walk (25 min) [high]
+   High priority; fits the remaining time.
+3. Mochi: Playtime (10 min) [medium]
+   Medium priority; fits the remaining time.
+
+Planned: 40 min | Remaining: 0 min
+
+Skipped:
+- Biscuit: Grooming - Needs 20 min; only 0 min remain.
+
+Sorting and Filtering Demo - Original order
+- 18:00 | Biscuit: Evening walk [pending]
+- Untimed | Biscuit: Grooming [pending]
+- 07:30 | Mochi: Feeding [completed]
+- 12:00 | Mochi: Playtime [pending]
+
+Sorted by scheduled time
+- 07:30 | Mochi: Feeding [completed]
+- 12:00 | Mochi: Playtime [pending]
+- 18:00 | Biscuit: Evening walk [pending]
+- Untimed | Biscuit: Grooming [pending]
+
+Pet filter: mochi
+- 07:30 | Mochi: Feeding [completed]
+- 12:00 | Mochi: Playtime [pending]
+
+Completed tasks
+- 07:30 | Mochi: Feeding [completed]
+
+Pending tasks for Mochi
+- 12:00 | Mochi: Playtime [pending]
+
+Recurring Tasks Demo - Completed on 2026-10-11
+- Mochi: Feeding (daily) - original completed
+  Next: 2026-10-12 at 07:30 [pending]
+- Mochi: Grooming (weekly) - original completed
+  Next: 2026-10-18 at 18:00 [pending]
+Completing Feeding again adds nothing: 4 tasks total.
+
+Task Conflicts Demo
+- Conflict on 2026-10-11 at 07:30: Biscuit: Morning walk; Mochi: Feeding are scheduled at the same time.

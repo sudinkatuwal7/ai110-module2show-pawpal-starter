@@ -1,0 +1,42 @@
+{
+  "README.md": {
+    "original_bytes": 13065,
+    "candidate_bytes": 13199,
+    "equal_after_CRLF_normalization": true
+  },
+  "app.py": {
+    "original_bytes": 10334,
+    "candidate_bytes": 10581,
+    "equal_after_CRLF_normalization": true
+  },
+  "diagrams/uml_draft.mmd": {
+    "original_bytes": 808,
+    "candidate_bytes": 848,
+    "equal_after_CRLF_normalization": true
+  },
+  "diagrams/uml_final.mmd": {
+    "original_bytes": 2591,
+    "candidate_bytes": 2652,
+    "equal_after_CRLF_normalization": true
+  },
+  "main.py": {
+    "original_bytes": 4312,
+    "candidate_bytes": 4417,
+    "equal_after_CRLF_normalization": true
+  },
+  "pawpal_system.py": {
+    "original_bytes": 10574,
+    "candidate_bytes": 10840,
+    "equal_after_CRLF_normalization": true
+  },
+  "reflection.md": {
+    "original_bytes": 10829,
+    "candidate_bytes": 10874,
+    "equal_after_CRLF_normalization": true
+  },
+  "tests/test_pawpal.py": {
+    "original_bytes": 24311,
+    "candidate_bytes": 24995,
+    "equal_after_CRLF_normalization": true
+  }
+}

@@ -17,6 +17,56 @@ def complete_task_today(pet: Pet, task: Task) -> None:
     st.session_state.completion_notice = message
 
 
+def load_task_editor(task: Task) -> None:
+    """Load a task's saved values, discarding the previous editor draft."""
+    st.session_state.edit_title = task.name
+    st.session_state.edit_duration = task.duration_minutes
+    st.session_state.edit_priority = task.priority
+    st.session_state.edit_recurrence = task.recurrence
+    st.session_state.edit_scheduled_time = task.scheduled_time or ""
+    st.session_state.edit_due_date = task.due_date
+    st.session_state.edit_loaded_task = task
+
+
+def save_pending_task(pet: Pet, task: Task) -> None:
+    """Validate and save the rendered task in place before the app redraws."""
+    owner = st.session_state.owner
+    if (
+        task.completed
+        or not any(existing is pet for existing in owner.pets)
+        or not any(existing is task for existing in pet.tasks)
+    ):
+        st.session_state.edit_notice = (
+            "error", "This task is completed or no longer available. Select a pending task."
+        )
+        return
+
+    changes = {
+        "name": st.session_state.edit_title.strip(),
+        "duration_minutes": st.session_state.edit_duration,
+        "priority": st.session_state.edit_priority,
+        "recurrence": st.session_state.edit_recurrence,
+        "scheduled_time": st.session_state.edit_scheduled_time.strip() or None,
+        "due_date": st.session_state.edit_due_date,
+    }
+    changed = any(getattr(task, field) != value for field, value in changes.items())
+    try:
+        # None means "leave unchanged" to the backend, not an empty duration.
+        if changes["duration_minutes"] is None:
+            raise ValueError("Task duration must be a positive whole number of minutes.")
+        task.update_details(**changes)
+    except ValueError as error:
+        st.session_state.edit_notice = ("error", str(error))
+        return
+
+    if changed:
+        st.session_state.pop("plan", None)
+        st.session_state.edit_notice = ("success", f"Saved changes to {pet.name}: {task.name}.")
+    else:
+        st.session_state.edit_notice = ("info", "No changes to save. Your current plan is unchanged.")
+    load_task_editor(task)
+
+
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
 if "owner" not in st.session_state:
@@ -145,6 +195,72 @@ if st.button("Add task", disabled=selected_pet_index is None, key="add_task"):
         st.success(f"Added {task.name} for {owner.pets[selected_pet_index].name}.")
 
 task_pairs = owner.get_all_tasks()
+st.markdown("### Edit a pending task")
+st.caption(
+    "Choose from all pending tasks, regardless of browse filters. Changes apply only when "
+    "you save; selecting another task discards unsaved edits."
+)
+edit_notice = st.session_state.pop("edit_notice", None)
+if edit_notice:
+    notice_type, notice_text = edit_notice
+    if notice_type == "success":
+        st.success(notice_text)
+    elif notice_type == "error":
+        st.error(notice_text)
+    else:
+        st.info(notice_text)
+
+edit_options = {
+    f"{number}. {pet.name}: {task.name}": (pet, task)
+    for number, (pet, task) in enumerate(task_pairs, start=1)
+    if not task.completed
+}
+if edit_options:
+    # Keep the same object selected when its title or collection numbering changes.
+    requested_label = st.session_state.get("edit_task")
+    previous_label = st.session_state.get("edit_previous_label")
+    if requested_label == previous_label or requested_label not in edit_options:
+        loaded_task = st.session_state.get("edit_loaded_task")
+        st.session_state.edit_task = next(
+            (label for label, (_, task) in edit_options.items() if task is loaded_task),
+            next(iter(edit_options)),
+        )
+    selected_label = st.selectbox("Pending task to edit", list(edit_options), key="edit_task")
+    edit_pet, edit_task = edit_options[selected_label]
+    st.session_state.edit_previous_label = selected_label
+    if st.session_state.get("edit_loaded_task") is not edit_task:
+        load_task_editor(edit_task)
+
+    with st.form("pending_task_editor"):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.text_input("Edit title", key="edit_title")
+        with col2:
+            st.number_input("Edit duration (minutes)", min_value=1, step=1, key="edit_duration")
+        with col3:
+            st.selectbox("Edit priority", ["high", "medium", "low"], key="edit_priority")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.selectbox("Edit recurrence", ["once", "daily", "weekly"], key="edit_recurrence")
+        with col2:
+            st.text_input(
+                "Edit scheduled time", placeholder="HH:MM", key="edit_scheduled_time",
+                help="Use 24-hour HH:MM. Clear this field for an untimed task.",
+            )
+        with col3:
+            st.date_input(
+                "Edit due date", value=None, key="edit_due_date",
+                help="Clear this field to remove the due date.",
+            )
+        st.form_submit_button(
+            "Save changes", key="edit_save", on_click=save_pending_task, args=(edit_pet, edit_task),
+        )
+else:
+    st.session_state.pop("edit_task", None)
+    st.session_state.pop("edit_previous_label", None)
+    st.session_state.pop("edit_loaded_task", None)
+    st.info("No pending tasks to edit. Add a care task or view your completed tasks below.")
+
 st.markdown("### Browse tasks")
 col1, col2 = st.columns(2)
 with col1:

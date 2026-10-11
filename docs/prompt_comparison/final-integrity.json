@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-10-11T17:19:32.082462-05:00",
+  "candidate_integrity": {
+    "a": {
+      "all_captured_file_hashes_unchanged": true,
+      "app_sha256": "d8f0798a59736a8fa7f6aaa8e4a4c4ece7c5e94785c8ac806f431245215a8cce"
+    },
+    "b": {
+      "all_captured_file_hashes_unchanged": true,
+      "app_sha256": "95ef4f791e7fd05438b49d0201abb668748863c2be31a4102d8dab52f2ec13eb"
+    }
+  },
+  "preserved_evidence_hashes_match": true,
+  "changed_original_main_files": [
+    "ai_interactions.md"
+  ],
+  "checks": [
+    {
+      "label": "main-pytest",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "exit_code": 0,
+      "stdout": "evaluator-reruns/main-pytest.stdout.txt",
+      "stderr": "evaluator-reruns/main-pytest.stderr.txt"
+    },
+    {
+      "label": "documentation-diff-check",
+      "argv": [
+        "git",
+        "-c",
+        "safe.directory=<USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter",
+        "diff",
+        "--check"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "exit_code": 0,
+      "stdout": "evaluator-reruns/documentation-diff-check.stdout.txt",
+      "stderr": "evaluator-reruns/documentation-diff-check.stderr.txt"
+    },
+    {
+      "label": "main-status",
+      "argv": [
+        "git",
+        "-c",
+        "safe.directory=<USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter",
+        "status",
+        "--short"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "exit_code": 0,
+      "stdout": "evaluator-reruns/main-status.stdout.txt",
+      "stderr": "evaluator-reruns/main-status.stderr.txt"
+    }
+  ]
+}

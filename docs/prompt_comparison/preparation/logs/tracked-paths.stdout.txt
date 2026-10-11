@@ -1,0 +1,13 @@
+.gitignore
+README.md
+__pycache__/pawpal_system.cpython-314.pyc
+ai_interactions.md
+app.py
+diagrams/uml.mmd
+diagrams/uml_draft.mmd
+diagrams/uml_final.mmd
+main.py
+pawpal_system.py
+reflection.md
+requirements.txt
+tests/test_pawpal.py

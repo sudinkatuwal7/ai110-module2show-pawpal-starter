@@ -1,0 +1,555 @@
+# PawPal+ pending-task editor: controlled prompt comparison
+
+Execute only in the candidate worktree assigned to this fresh session. Do not start until the user authorizes this candidate run.
+
+The complete shared specification follows, then the exact frozen acceptance test. Do not modify either. Only app.py may change.
+
+# Frozen shared specification: pending-task editing
+
+Baseline commit: `98805949bffcb69f5e5299a4deaafe6b8bdb3623`.
+
+This specification and the supplied acceptance tests are identical for both
+candidates. Only the strategy instruction at the end of each prompt differs.
+The comparison has not been run. No winner has been selected.
+
+## Acceptance criteria
+
+| ID | Acceptance criterion |
+| --- | --- |
+| AC1 | Select one specific pending task across all pets. Distinguish separate objects even when pet names or task details match. Completed tasks are not editable. |
+| AC2 | Prepopulate title, duration, priority, recurrence, scheduled time, and due date from the selected task. Switching tasks must not carry another task's values into the editor. |
+| AC3 | Support editing all seven fields. Title maps to `Task.name`; recurrence supports `once`, `daily`, and `weekly`. Blank scheduled time or due date clears that optional value. |
+| AC4 | Change task data only when **Save changes** is submitted. Opening the editor, typing, switching selection, and ordinary reruns must not modify tasks. |
+| AC5 | Save through `Task.update_details()`. Invalid input must show a readable error and leave every task field unchanged, including otherwise valid proposed edits. |
+| AC6 | Preserve the selected Task object, its owning Pet, completion state, and position in the pet's task collection. Do not replace, append, remove, or complete tasks during editing. |
+| AC7 | Clear the cached plan only after a successful save that changes task data. Invalid submissions, navigation, and unchanged submissions retain the existing plan. Existing invalidation for other app actions remains intact. |
+| AC8 | After saving, the displayed chronological order and same-start-time warnings reflect the updated data without another user action. Untimed tasks remain last. |
+| AC9 | Changing recurrence does not create another task. Later completion still creates exactly one next occurrence using the existing backend behavior. |
+| AC10 | Repeated saves and reruns do not create duplicates. If the selected task becomes completed before submission, reject the stale edit safely. |
+| AC11 | No-pet, no-task, and all-completed states display helpful guidance without exceptions. |
+| AC12 | Preserve existing creation, completion, filtering, priority scheduling, time budgets, exact-time conflict semantics, and all 97 baseline tests. |
+
+The earlier wording "all seven fields" is retained. It means title, duration,
+priority, recurrence, scheduled time, and due date: six editable task attributes.
+Selection is the seventh editor control, not a new task attribute. Both
+candidates receive this explicit clarification; do not invent another field.
+
+## Shared behavior details
+
+- The editor lists all pending tasks independently of browse filters.
+- Selecting another task discards unsaved edits and loads that task's values.
+- Normalize title and time whitespace as in the existing UI/backend. A blank
+  scheduled time becomes `None`. A cleared single-date input becomes `None`.
+- Compare normalized saved values when deciding whether anything changed.
+  An unchanged submission preserves the current plan.
+- Preserve current session objects. Do not move a task between pets, change its
+  completion date, or alter any nonselected task.
+- Completion after an edit remains the existing `Pet.complete_task()` workflow.
+- On stale submission, do not redirect the submitted values to a different task.
+  Leave the completed task and all other tasks unchanged, and show guidance.
+- A successful change shows `st.success`; rejected values show `st.error`.
+  Existing conflict warnings continue to use `st.warning`.
+- No persistence, deletion, interval-overlap detection, or unrelated UI redesign.
+
+## Common black-box test interface
+
+These controls make the exact same AppTest file usable against both candidates.
+They prescribe a small user-facing interface, not a helper function, callback,
+form layout, task lookup algorithm, or storage implementation.
+
+| Streamlit control | Fixed key | Values / behavior |
+| --- | --- | --- |
+| `st.selectbox` | `edit_task` | Unique string options in pending `Owner.get_all_tasks()` order. Each displayed string includes pet and task names and a distinguishing number/token. Use strings as the actual selectbox options so AppTest can select by the displayed string. |
+| `st.text_input` | `edit_title` | Selected task name |
+| `st.number_input` | `edit_duration` | Positive whole minutes; prevent invalid numeric values at the widget or reject them atomically |
+| `st.selectbox` | `edit_priority` | `high`, `medium`, `low` |
+| `st.selectbox` | `edit_recurrence` | `once`, `daily`, `weekly` |
+| `st.text_input` | `edit_scheduled_time` | HH:MM or blank |
+| `st.date_input` | `edit_due_date` | Single date or `None`, clearable |
+| Button or form submit button | `edit_save` | Label `Save changes` |
+
+When pending tasks exist, expose one editor with these keys. Default selection
+may be the first pending task. With none, hide/disable the editor and show useful
+`st.info` guidance. Keep existing widget keys and state entries (`owner`,
+`scheduler`, and cached `plan`) working. Keep browse-table column names `Task`,
+`Pet`, `Time`, and `Status`; either a table or dataframe is accepted.
+
+The tests inspect visible controls, displayed rows/warnings, public backend
+objects, and the existing cached plan. They do not call candidate helper
+functions. One test wraps and delegates to the real `Task.update_details()` to
+verify required API use; it does not mock its behavior.
+
+## Scope and execution controls
+
+- Read `app.py`, `pawpal_system.py`, `tests/test_pawpal.py`, `README.md`, and
+  `ai_interactions.md` before editing.
+- Modify only `app.py`. Preserve backend APIs and the existing 97 tests exactly.
+  Do not modify the supplied acceptance test file.
+- Do not install packages, change dependencies, edit documentation, commit,
+  merge, push, or inspect another candidate's worktree, branch, or output.
+- If a backend issue prevents integration, report it without changing backend
+  code. Otherwise finish within the approved candidate worktree.
+- Use a fresh session for each candidate with the same exposed model/version,
+  reasoning setting, permissions, tools, and time allowance. The executor must
+  record these before either run. If model information is unavailable, say so.
+- Use one initial request per candidate, at most 30 minutes of active run time,
+  no human hints. Self-correction using test results is allowed equally. Record
+  approval/infrastructure pauses separately. Do not extend one candidate's
+  allowance based on the other candidate's result.
+- Run candidates sequentially using the same recorded Python executable and
+  dependency environment. Record the chosen order before starting. Do not run
+  them until the user explicitly authorizes the next step.
+- Tests capture `date.today()` for each fixture and use relative dates. Record
+  the local test date; do not compare runs crossing local midnight without
+  rerunning verification for both under the same date conditions.
+- Preserve original candidate output before any human repairs or integration.
+- Report actual commands, results, changes, and limitations. AppTest is not a
+  visual browser review; do not claim unperformed checks.
+
+## Identical verification commands
+
+From the candidate worktree, using the recorded Python executable:
+
+```powershell
+$env:PYTHONDONTWRITEBYTECODE = '1'
+python -m pytest tests/test_pawpal.py -p no:cacheprovider
+python -m pytest tests/test_pending_task_editing.py -p no:cacheprovider
+python -m pytest -p no:cacheprovider
+python main.py
+python -c "from pathlib import Path; compile(Path('app.py').read_text(encoding='utf-8'), 'app.py', 'exec'); print('app.py syntax OK')"
+git diff --check
+git diff --stat
+git status --short
+```
+
+All 97 baseline cases must pass separately. Report acceptance failures honestly;
+do not skip, weaken, or rewrite the frozen tests. Preserve the protected file
+hashes. The evaluator also checks that only `app.py` differs from the baseline
+(apart from the identical untracked acceptance test supplied during preparation).
+
+## Comparison and evidence
+
+Correctness gates: baseline preservation, task identity, atomicity, and no
+duplicate creation. Report AC1-AC12 individually as PASS, FAIL, or NOT VERIFIED.
+Among candidates passing the gates, review clarity, usability, scope, and human
+correction effort. Runtime and diff size are descriptive, not automatic winners.
+One run per strategy is a case study, not a universal model-performance claim.
+
+## Frozen acceptance tests: tests/test_pending_task_editing.py
+
+```python
+"""Frozen UI acceptance tests shared by both prompt-comparison candidates.
+
+Run from a candidate root. These tests drive the public widget interface and
+real backend objects; they do not depend on candidate helper functions.
+"""
+
+from datetime import date, timedelta
+from pathlib import Path
+
+import pytest
+from streamlit.testing.v1 import AppTest
+
+import pawpal_system
+from pawpal_system import Owner, Pet, Scheduler, Task
+
+
+APP_ROOT = Path(__file__).resolve().parents[1]
+
+
+def run_app(at):
+    """Run one UI event and fail clearly on an unhandled app exception."""
+    at.run(timeout=15)
+    assert not at.exception, [str(error.value) for error in at.exception]
+    return at
+
+
+def widget(at, kind, key):
+    """Find a control by the agreed public key, independently of layout."""
+    matches = [element for element in getattr(at, kind) if element.key == key]
+    assert len(matches) == 1, f"Expected one {kind} with key {key!r}"
+    return matches[0]
+
+
+def start_app(owner):
+    """Seed real session objects and a real cached plan before UI startup."""
+    assert Path(pawpal_system.__file__).resolve() == APP_ROOT / "pawpal_system.py"
+    at = AppTest.from_file(str(APP_ROOT / "app.py"), default_timeout=15)
+    scheduler = Scheduler()
+    plan = scheduler.generate_plan(owner, on_date=date.today())
+    at.session_state["owner"] = owner
+    at.session_state["scheduler"] = scheduler
+    at.session_state["plan"] = plan
+    run_app(at)
+    assert at.session_state["owner"] is owner
+    assert at.session_state["plan"] is plan
+    return at, plan
+
+
+def select_pending(at, index):
+    """Select by the agreed pending collection order, not private IDs."""
+    selector = widget(at, "selectbox", "edit_task")
+    selector.select(selector.options[index])
+    return run_app(at)
+
+
+def save(at):
+    """Submit the editor and inspect the immediately resulting UI."""
+    widget(at, "button", "edit_save").click()
+    return run_app(at)
+
+
+def collection_ids(owner):
+    """Capture collection order and object identities without equality lookup."""
+    return [(id(pet), [id(task) for task in pet.tasks]) for pet in owner.pets]
+
+
+def task_details(owner):
+    """Take copies so later mutation cannot alter the expected values."""
+    return [vars(task).copy() for _, task in owner.get_all_tasks()]
+
+
+def assert_editor_values(at, task):
+    """Check all six editable attributes against the selected real task."""
+    assert widget(at, "text_input", "edit_title").value == task.name
+    assert widget(at, "number_input", "edit_duration").value == task.duration_minutes
+    assert widget(at, "selectbox", "edit_priority").value == task.priority
+    assert widget(at, "selectbox", "edit_recurrence").value == task.recurrence
+    assert widget(at, "text_input", "edit_scheduled_time").value == (task.scheduled_time or "")
+    assert widget(at, "date_input", "edit_due_date").value == task.due_date
+
+
+def browse_names(at):
+    """Find the browse view by public columns, allowing table or dataframe."""
+    matches = []
+    for element in list(at.table) + list(at.dataframe):
+        frame = element.value
+        if {"Pet", "Task", "Time", "Status"}.issubset(frame.columns):
+            matches.append(frame)
+    assert len(matches) == 1, "Expected one visible task browse table"
+    return matches[0]["Task"].tolist()
+
+
+def conflicts(at):
+    """Read the existing backend conflict warnings from the rendered UI."""
+    return [str(item.value) for item in at.warning if str(item.value).startswith("Conflict on ")]
+
+
+@pytest.fixture
+def care():
+    """Use today's date with fresh, independent objects for every test."""
+    today = date.today()
+    first = Task("Walk", 10, "high", "once", scheduled_time="09:45", due_date=today)
+    second = Task("Feeding", 5, "medium", "daily", scheduled_time="09:05", due_date=today)
+    untimed = Task("Grooming", 15, "low", "weekly")
+    dog = Pet("Biscuit", "dog", tasks=[first, untimed])
+    cat = Pet("Mochi", "cat", tasks=[second])
+    owner = Owner("Jordan", 40, True, [dog, cat])
+    yield owner, dog, cat, first, second, untimed, today
+    assert date.today() == today, "Local date changed: rerun both candidates' verification"
+
+
+def test_pending_selector_disambiguates_equal_objects_and_ignores_browse_filters():
+    """AC1/AC6: identical details do not make distinct objects interchangeable."""
+    first, second, third = [Task("Care", 5) for _ in range(3)]
+    done = Task("Finished", 5)
+    done.mark_complete()
+    pets = [Pet("Mochi", "cat", tasks=[first, second, done]), Pet("Mochi", "cat", tasks=[third])]
+    owner = Owner("Jordan", 30, pets=pets)
+    at, plan = start_app(owner)
+    original_ids = collection_ids(owner)
+    options = widget(at, "selectbox", "edit_task").options
+    assert len(options) == 3
+    assert len(set(options)) == 3
+    assert all("Mochi" in option and "Care" in option for option in options)
+    assert all("Finished" not in option for option in options)
+
+    widget(at, "text_input", "pet_filter").set_value("Unknown")
+    widget(at, "selectbox", "status_filter").select("Completed")
+    run_app(at)
+    assert widget(at, "selectbox", "edit_task").options == options
+    assert at.session_state["plan"] is plan
+
+    select_pending(at, 1)
+    widget(at, "text_input", "edit_title").set_value("Edited second")
+    save(at)
+    assert first.name == "Care"
+    assert second.name == "Edited second"
+    assert third.name == "Care"
+    assert done.name == "Finished" and done.completed
+    assert collection_ids(owner) == original_ids
+
+    select_pending(at, 2)
+    widget(at, "text_input", "edit_title").set_value("Edited other pet")
+    save(at)
+    assert third.name == "Edited other pet"
+    assert first.name == "Care" and second.name == "Edited second"
+    assert collection_ids(owner) == original_ids
+
+
+def test_switching_tasks_discards_drafts_and_preserves_tasks_and_plan(care):
+    """AC2/AC4/AC7: widget reruns never commit an unsaved draft."""
+    owner, _, _, first, second, untimed, _ = care
+    at, plan = start_app(owner)
+    before = task_details(owner)
+    assert_editor_values(at, first)
+    widget(at, "text_input", "edit_title").set_value("Unsaved draft")
+    widget(at, "number_input", "edit_duration").set_value(21)
+    run_app(at)
+    assert task_details(owner) == before
+    assert at.session_state["plan"] is plan
+
+    select_pending(at, 2)
+    assert_editor_values(at, second)
+    select_pending(at, 1)
+    assert_editor_values(at, untimed)
+    select_pending(at, 0)
+    assert_editor_values(at, first)
+    assert task_details(owner) == before
+    assert at.session_state["plan"] is plan
+
+
+def test_save_all_fields_uses_real_update_and_preserves_identity(care, monkeypatch):
+    """AC3/AC5/AC6/AC7: edit in place through the existing atomic API."""
+    owner, dog, _, first, _, _, today = care
+    at, _ = start_app(owner)
+    original_ids = collection_ids(owner)
+    other_details = [vars(task).copy() for _, task in owner.get_all_tasks() if task is not first]
+    real_update = Task.update_details
+    updated_objects = []
+
+    def record_real_update(self, **changes):
+        updated_objects.append(self)
+        return real_update(self, **changes)
+
+    monkeypatch.setattr(Task, "update_details", record_real_update)
+    widget(at, "text_input", "edit_title").set_value("  Revised walk  ")
+    widget(at, "number_input", "edit_duration").set_value(17)
+    widget(at, "selectbox", "edit_priority").select("low")
+    widget(at, "selectbox", "edit_recurrence").select("weekly")
+    widget(at, "text_input", "edit_scheduled_time").set_value(" 07:15 ")
+    widget(at, "date_input", "edit_due_date").set_value(today + timedelta(days=3))
+    save(at)
+
+    assert any(task is first for task in updated_objects)
+    assert vars(first) == {
+        "name": "Revised walk", "duration_minutes": 17, "priority": "low",
+        "recurrence": "weekly", "last_completed_date": None,
+        "scheduled_time": "07:15", "due_date": today + timedelta(days=3),
+    }
+    assert dog.tasks[0] is first
+    assert collection_ids(owner) == original_ids
+    assert [vars(task) for _, task in owner.get_all_tasks() if task is not first] == other_details
+    assert "plan" not in at.session_state
+    assert at.success, "A successful change should show a confirmation"
+
+
+@pytest.mark.parametrize("key,value", [
+    ("edit_title", ""),
+    ("edit_title", "   "),
+    ("edit_scheduled_time", "24:00"),
+    ("edit_scheduled_time", "9:00"),
+])
+def test_invalid_save_is_atomic_and_keeps_existing_plan(care, key, value):
+    """AC5/AC7: even valid proposed edits must roll back on rejection."""
+    owner = care[0]
+    at, plan = start_app(owner)
+    before = task_details(owner)
+    original_ids = collection_ids(owner)
+    widget(at, "text_input", "edit_title").set_value("Changed title")
+    widget(at, "number_input", "edit_duration").set_value(22)
+    widget(at, "selectbox", "edit_recurrence").select("daily")
+    widget(at, "text_input", key).set_value(value)
+    save(at)
+    assert task_details(owner) == before
+    assert collection_ids(owner) == original_ids
+    assert at.session_state["plan"] is plan
+    assert at.error and any(str(item.value).strip() for item in at.error)
+
+
+@pytest.mark.parametrize("add_whitespace", [False, True])
+def test_unchanged_save_keeps_plan_and_repeated_reruns_do_not_duplicate(care, add_whitespace):
+    """AC7/AC10: normalization does not turn a no-op into a data change."""
+    owner, _, _, first, _, _, _ = care
+    at, plan = start_app(owner)
+    before = task_details(owner)
+    original_ids = collection_ids(owner)
+    if add_whitespace:
+        widget(at, "text_input", "edit_title").set_value(f" {first.name} ")
+        widget(at, "text_input", "edit_scheduled_time").set_value(f" {first.scheduled_time} ")
+    save(at)
+    for _ in range(2):
+        run_app(at)
+        save(at)
+    assert task_details(owner) == before
+    assert collection_ids(owner) == original_ids
+    assert at.session_state["plan"] is plan
+
+
+def test_optional_time_and_due_date_can_be_cleared(care):
+    """AC3/AC8: blank optional controls explicitly clear existing values."""
+    owner, _, _, first, _, _, _ = care
+    at, _ = start_app(owner)
+    widget(at, "text_input", "edit_scheduled_time").set_value("")
+    widget(at, "date_input", "edit_due_date").set_value(None)
+    save(at)
+    assert first.scheduled_time is None
+    assert first.due_date is None
+    assert widget(at, "text_input", "edit_scheduled_time").value == ""
+    assert widget(at, "date_input", "edit_due_date").value is None
+    assert browse_names(at) == ["Feeding", "Walk", "Grooming"]
+
+
+def test_time_and_date_edits_refresh_sorting_and_cross_pet_warnings(care):
+    """AC8: verify displayed results, not just a direct scheduler call."""
+    owner, _, _, _, _, _, today = care
+    at, _ = start_app(owner)
+    assert browse_names(at) == ["Feeding", "Walk", "Grooming"]
+    assert conflicts(at) == []
+    widget(at, "text_input", "edit_scheduled_time").set_value("08:00")
+    save(at)
+    assert browse_names(at) == ["Walk", "Feeding", "Grooming"]
+
+    widget(at, "text_input", "edit_scheduled_time").set_value("09:05")
+    save(at)
+    warnings = conflicts(at)
+    assert len(warnings) == 1
+    assert all(text in warnings[0] for text in ("Biscuit: Walk", "Mochi: Feeding", "09:05", str(today)))
+
+    widget(at, "date_input", "edit_due_date").set_value(today + timedelta(days=1))
+    save(at)
+    assert conflicts(at) == []
+    widget(at, "date_input", "edit_due_date").set_value(today)
+    widget(at, "text_input", "edit_scheduled_time").set_value("09:06")
+    save(at)
+    assert conflicts(at) == [], "Different start times are not interval-overlap detection"
+
+
+@pytest.mark.parametrize("recurrence,days", [("daily", 1), ("weekly", 7)])
+def test_edit_then_complete_creates_one_occurrence_with_edited_details(care, recurrence, days):
+    """AC9/AC10/AC12: recurrence is created by completion, not by editing."""
+    owner, dog, _, first, _, _, today = care
+    at, _ = start_app(owner)
+    original_ids = collection_ids(owner)
+    widget(at, "selectbox", "edit_recurrence").select(recurrence)
+    widget(at, "text_input", "edit_title").set_value("Updated care")
+    widget(at, "text_input", "edit_scheduled_time").set_value("07:10")
+    save(at)
+    save(at)
+    run_app(at)
+    assert collection_ids(owner) == original_ids
+    assert not first.completed
+
+    widget(at, "button", f"complete_task_{id(first)}").click()
+    run_app(at)
+    assert first.completed
+    assert first.last_completed_date == today
+    assert len(dog.tasks) == 3
+    next_task = dog.tasks[-1]
+    assert next_task is not first
+    assert next_task.name == "Updated care"
+    assert next_task.recurrence == recurrence
+    assert next_task.scheduled_time == "07:10"
+    assert next_task.due_date == today + timedelta(days=days)
+    assert not next_task.completed
+    for _ in range(2):
+        run_app(at)
+    assert len(dog.tasks) == 3
+    assert len(owner.get_all_tasks()) == 4
+    assert not any(button.key == f"complete_task_{id(first)}" for button in at.button)
+
+
+def test_stale_submission_cannot_edit_completed_task_or_redirect_to_another(care):
+    """AC10: simulate completion after the editor rendered but before Save."""
+    owner, _, _, first, _, _, today = care
+    at, _ = start_app(owner)
+    widget(at, "text_input", "edit_title").set_value("Stale draft")
+    widget(at, "number_input", "edit_duration").set_value(19)
+    # This controlled fixture event creates the stale state; it is not an edit.
+    first.mark_complete(today)
+    before = task_details(owner)
+    original_ids = collection_ids(owner)
+    save(at)
+    assert task_details(owner) == before
+    assert collection_ids(owner) == original_ids
+    messages = [str(item.value).lower() for item in list(at.info) + list(at.warning) + list(at.error)]
+    assert any("complet" in message or "select" in message or "no longer" in message for message in messages)
+
+
+@pytest.mark.parametrize("state", ["no_pets", "no_tasks", "all_completed"])
+def test_empty_editor_states_are_safe_and_explain_what_to_do(state):
+    """AC11: an empty pending collection must not leave an active Save."""
+    owner = Owner("Jordan", 30)
+    if state != "no_pets":
+        pet = Pet("Mochi", "cat")
+        owner.add_pet(pet)
+        if state == "all_completed":
+            task = Task("Finished", 5)
+            task.mark_complete()
+            pet.add_task(task)
+    before = task_details(owner)
+    original_ids = collection_ids(owner)
+    at, plan = start_app(owner)
+    saves = [button for button in at.button if button.key == "edit_save"]
+    assert not saves or all(button.disabled for button in saves)
+    selectors = [element for element in at.selectbox if element.key == "edit_task"]
+    assert not selectors or all(element.disabled or not element.options for element in selectors)
+    assert at.info and any(str(item.value).strip() for item in at.info)
+    run_app(at)
+    assert task_details(owner) == before
+    assert collection_ids(owner) == original_ids
+    assert at.session_state["plan"] is plan
+
+
+def test_edited_values_feed_the_existing_budget_and_priority_scheduler():
+    """AC12: regeneration still uses whole tasks, priorities, and one budget."""
+    first = Task("Walk", 6, "medium")
+    second = Task("Feeding", 5, "low")
+    owner = Owner("Jordan", 10, pets=[Pet("Dog", "dog", tasks=[first]), Pet("Cat", "cat", tasks=[second])])
+    at, _ = start_app(owner)
+    widget(at, "number_input", "edit_duration").set_value(12)
+    widget(at, "selectbox", "edit_priority").select("high")
+    save(at)
+    assert "plan" not in at.session_state
+    widget(at, "button", "generate_schedule").click()
+    run_app(at)
+    plan = at.session_state["plan"]
+    assert len(plan["selected"]) == 1 and plan["selected"][0]["task"] is second
+    assert len(plan["skipped"]) == 1 and plan["skipped"][0]["task"] is first
+    assert plan["total_minutes"] == 5 and plan["remaining_minutes"] == 5
+
+    widget(at, "number_input", "available_minutes").set_value(20)
+    run_app(at)
+    assert "plan" not in at.session_state
+    widget(at, "button", "generate_schedule").click()
+    run_app(at)
+    plan = at.session_state["plan"]
+    assert plan["selected"][0]["task"] is first
+    assert plan["selected"][1]["task"] is second
+    assert plan["total_minutes"] == 17 and plan["remaining_minutes"] == 3
+
+
+def test_existing_task_creation_and_filtering_still_work(care):
+    """AC12: the editor must not collide with the existing creation widgets."""
+    owner, dog, _, first, _, _, _ = care
+    at, _ = start_app(owner)
+    original = vars(first).copy()
+    widget(at, "text_input", "task_title").set_value("New enrichment")
+    widget(at, "number_input", "duration").set_value(8)
+    widget(at, "selectbox", "priority").select("medium")
+    widget(at, "button", "add_task").click()
+    run_app(at)
+    assert len(owner.get_all_tasks()) == 4
+    assert dog.tasks[-1].name == "New enrichment"
+    assert vars(first) == original
+    assert "plan" not in at.session_state
+    widget(at, "text_input", "pet_filter").set_value("mochi")
+    widget(at, "selectbox", "status_filter").select("Pending")
+    run_app(at)
+    assert browse_names(at) == ["Feeding"]
+    assert len(widget(at, "selectbox", "edit_task").options) == 4
+```
+
+## Strategy instruction
+
+Work in stages. First inspect the relevant code and provide a brief implementation plan identifying selection, validation, and session-state risks. Then implement the feature, run the required checks, and review the result against the acceptance criteria. Report the completed changes and results.

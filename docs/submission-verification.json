@@ -1,0 +1,154 @@
+{
+  "phase": "Final submission-readiness verification",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "packages": {
+    "streamlit": "1.60.0",
+    "pytest": "9.1.1"
+  },
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "checks": [
+    {
+      "check": "pytest",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "<PROJECT_ROOT>",
+      "started_at": "2026-10-11T17:35:15.708737-05:00",
+      "elapsed_seconds": 20.953808199963532,
+      "exit_code": 0,
+      "stdout": "============================= test session starts =============================\r\nplatform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0\r\nrootdir: <PROJECT_ROOT>\r\nplugins: anyio-4.12.1\r\ncollected 116 items\r\n\r\ntests\\test_pawpal.py ................................................... [ 43%]\r\n..............................................                           [ 83%]\r\ntests\\test_pending_task_editing.py ...................                   [100%]\r\n\r\n============================ 116 passed in 20.11s =============================\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "demo",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "main.py"
+      ],
+      "cwd": "<PROJECT_ROOT>",
+      "started_at": "2026-10-11T17:35:36.724805-05:00",
+      "elapsed_seconds": 0.11111669999081641,
+      "exit_code": 0,
+      "stdout": "Today's Schedule\r\nOwner: Jordan | Available time: 40 min\r\n\r\n1. Mochi: Feeding (5 min) [high]\r\n   High priority; fits the remaining time.\r\n2. Biscuit: Morning walk (25 min) [high]\r\n   High priority; fits the remaining time.\r\n3. Mochi: Playtime (10 min) [medium]\r\n   Medium priority; fits the remaining time.\r\n\r\nPlanned: 40 min | Remaining: 0 min\r\n\r\nSkipped:\r\n- Biscuit: Grooming - Needs 20 min; only 0 min remain.\r\n\r\nSorting and Filtering Demo - Original order\r\n- 18:00 | Biscuit: Evening walk [pending]\r\n- Untimed | Biscuit: Grooming [pending]\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nSorted by scheduled time\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n- 18:00 | Biscuit: Evening walk [pending]\r\n- Untimed | Biscuit: Grooming [pending]\r\n\r\nPet filter: mochi\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nCompleted tasks\r\n- 07:30 | Mochi: Feeding [completed]\r\n\r\nPending tasks for Mochi\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nRecurring Tasks Demo - Completed on 2026-10-11\r\n- Mochi: Feeding (daily) - original completed\r\n  Next: 2026-10-12 at 07:30 [pending]\r\n- Mochi: Grooming (weekly) - original completed\r\n  Next: 2026-10-18 at 18:00 [pending]\r\nCompleting Feeding again adds nothing: 4 tasks total.\r\n\r\nTask Conflicts Demo\r\n- Conflict on 2026-10-11 at 07:30: Biscuit: Morning walk; Mochi: Feeding are scheduled at the same time.\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "syntax",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-c",
+        "from pathlib import Path; paths=[Path('app.py'),Path('main.py'),Path('pawpal_system.py'),*Path('tests').glob('test_*.py'),*Path('docs/prompt_comparison').glob('*.py')]; [compile(p.read_text(encoding='utf-8'),str(p),'exec') for p in paths]; print('Syntax OK for',len(paths),'Python files; no bytecode written.')"
+      ],
+      "cwd": "<PROJECT_ROOT>",
+      "started_at": "2026-10-11T17:35:36.840461-05:00",
+      "elapsed_seconds": 0.11148670001421124,
+      "exit_code": 0,
+      "stdout": "Syntax OK for 8 Python files; no bytecode written.\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "diff-check",
+      "argv": [
+        "git",
+        "-c",
+        "safe.directory=<USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter",
+        "diff",
+        "--check"
+      ],
+      "cwd": "<PROJECT_ROOT>",
+      "started_at": "2026-10-11T17:35:36.958649-05:00",
+      "elapsed_seconds": 0.029433099960442632,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'ai_interactions.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'diagrams/uml.mmd', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'reflection.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'requirements.txt', LF will be replaced by CRLF the next time Git touches it\n"
+    },
+    {
+      "check": "staged-diff-check",
+      "argv": [
+        "git",
+        "-c",
+        "safe.directory=<USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "<PROJECT_ROOT>",
+      "started_at": "2026-10-11T17:35:36.993882-05:00",
+      "elapsed_seconds": 0.030093299981672317,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "privacy_note": "Personal home and repository paths in this public copy are replaced by placeholders. Raw output remains in the local temporary backup.",
+  "audit": {
+    "checked_at": "2026-10-11T17:37:20.517166-05:00",
+    "modified_by_cleanup": [
+      ".gitignore",
+      "README.md",
+      "ai_interactions.md",
+      "diagrams/uml.mmd",
+      "docs/prompt_comparison.md",
+      "docs/prompt_comparison/README.md",
+      "docs/prompt_comparison/capture_evidence.py",
+      "docs/prompt_comparison/environment.json",
+      "docs/prompt_comparison/evaluator-reruns/a/acceptance.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/a/baseline.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/a/combined.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/a/supplemental.stdout.json",
+      "docs/prompt_comparison/evaluator-reruns/b/acceptance.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/b/baseline.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/b/combined.stdout.txt",
+      "docs/prompt_comparison/evaluator-reruns/b/supplemental.stdout.json",
+      "docs/prompt_comparison/evaluator-reruns/commands.json",
+      "docs/prompt_comparison/evaluator-reruns/main-pytest.stdout.txt",
+      "docs/prompt_comparison/final-integrity.json",
+      "docs/prompt_comparison/integration-verification.json",
+      "docs/prompt_comparison/original/a/final-response.md",
+      "docs/prompt_comparison/original/a/provenance.json",
+      "docs/prompt_comparison/original/a/tool-results.json",
+      "docs/prompt_comparison/original/a/transcript.visible.jsonl",
+      "docs/prompt_comparison/original/b/final-response.md",
+      "docs/prompt_comparison/original/b/provenance.json",
+      "docs/prompt_comparison/original/b/tool-results.json",
+      "docs/prompt_comparison/original/b/transcript.visible.jsonl",
+      "docs/prompt_comparison/preparation/README.md",
+      "docs/prompt_comparison/preparation/baseline_manifest.json",
+      "docs/prompt_comparison/preparation/commands.json",
+      "docs/prompt_comparison/preparation/environment.json",
+      "docs/prompt_comparison/preparation/logs/a-baseline-pytest.stdout.txt",
+      "docs/prompt_comparison/preparation/logs/b-baseline-pytest.stdout.txt",
+      "docs/prompt_comparison/preparation/logs/baseline-pytest.stdout.txt",
+      "docs/prompt_comparison/preparation/logs/worktrees.stdout.txt",
+      "docs/prompt_comparison/preparation/preparation_issues.md",
+      "docs/prompt_comparison/preparation/prepare_artifacts.py",
+      "docs/prompt_comparison/preparation/verification_report.json",
+      "docs/prompt_comparison/verify_candidates.py",
+      "reflection.md",
+      "requirements.txt"
+    ],
+    "added_by_cleanup": [
+      "docs/prompt_comparison/redaction-manifest.json",
+      "docs/prompt_comparison/submission-sha256.json",
+      "docs/submission-verification.json",
+      "docs/submission_readiness.md"
+    ],
+    "git_index_removal_only": "__pycache__/pawpal_system.cpython-314.pyc",
+    "local_bytecode_retained": true,
+    "virtual_environment_retained": true,
+    "production_and_test_hashes_unchanged": true,
+    "candidate_worktrees_and_external_preparation_unchanged": true,
+    "new_cache_files": [],
+    "privacy_redaction_files": 36,
+    "documentation_links_resolve": true,
+    "final_staged_and_unstaged_diff_checks": "PASS",
+    "mermaid_rendering": "NOT VERIFIED: mmdc not installed",
+    "browser_review": "NOT PERFORMED"
+  }
+}

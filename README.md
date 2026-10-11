@@ -18,13 +18,15 @@ The project follows a design-first workflow: UML, Python scheduling logic, and a
 
 The [final system architecture UML](diagrams/uml_final.mmd) shows the four classes, their attributes and methods, and their relationships. Owner manages pets, Pet contains tasks, and Scheduler uses their information without inheritance. The Streamlit UI calls these backend methods and keeps the objects in session state.
 
+The original design is retained in [uml_draft.mmd](diagrams/uml_draft.mmd); [uml.mmd](diagrams/uml.mmd) mirrors the final diagram for graders looking at the default filename.
+
 The logic layer in `pawpal_system.py` uses four classes. `Task` stores an activity's name, duration, priority, recurrence, last completion date, optional scheduled time, and optional due date. Its `completed` property reports whether completion has ever been recorded; `is_due(on_date)` checks whether the task is pending and its due date is absent or on/before that day. `Pet` manages its tasks, and `Owner` manages pets. `Owner.get_all_tasks()` returns `(pet, task)` pairs so tasks stay associated with their pets.
 
 `Scheduler.generate_plan(owner, on_date=None)` retrieves all tasks through that Owner method, orders them by priority, and fits whole tasks into one shared time budget. The short-task preference breaks ties within a priority; otherwise, collection order is preserved. Tasks that do not fit or are not due are skipped with reasons, and the scheduler continues checking other tasks. One-time, daily, and weekly tasks are supported, and generating a plan does not mark tasks complete.
 
 The plan is a dictionary with `selected`, `skipped`, `total_minutes`, and `remaining_minutes`. Each selected or skipped entry contains `pet`, `task`, and `reason`. The plan allocates a total time budget; it does not assign or enforce appointment times. Chronological sorting and conflict detection are separate methods, so the plan dictionary stays unchanged.
 
-The backend has no Streamlit dependency. The app in `app.py` connects task entry, sorting, filtering, completion, conflict warnings, and schedule generation to the backend. Data stays in the current Streamlit session; adding pets or tasks, completing tasks, or changing scheduling settings clears the saved plan so it can be regenerated. Run the app with `streamlit run app.py`.
+The backend has no Streamlit dependency. The app in `app.py` connects task entry, pending-task editing, sorting, filtering, completion, conflict warnings, and schedule generation to the backend. Data stays in the current Streamlit session; adding pets or tasks, saving changed task details, completing tasks, or changing scheduling settings clears the saved plan so it can be regenerated. Run the app with `streamlit run app.py`.
 
 Task inputs and owner scheduling settings are validated when created or updated through their methods. `main.py` demonstrates the system, and `tests/test_pawpal.py` checks completion, task addition, multi-pet scheduling through the Owner accessor, priorities, time limits, recurrence, and validation.
 
@@ -35,11 +37,25 @@ Task inputs and owner scheduling settings are validated when created or updated 
 - Browse tasks automatically sorted by scheduled time, with untimed tasks last; filter by full pet name (ignoring case) and completion status.
 - Choose `once`, `daily`, or `weekly` recurrence. Use **Complete today** buttons to record completion and automatically create the next daily or weekly occurrence.
 - See readable warnings for pending tasks with identical start times on the same effective date, including tasks belonging to different pets. Warnings check all tasks regardless of the display filters.
-- Use validated inputs and a backend covered by 97 pytest cases. The UI supports task creation and completion; editing and removal remain backend methods.
+- Edit a specific pending task in a form and save its title, duration, priority, recurrence, optional time, and due date together. Numbered labels distinguish tasks with matching names.
+- Use validated inputs, a backend covered by 97 pytest cases, and 19 Streamlit AppTest cases for pending-task editing. Task removal remains a backend method.
+
+## Editing pending tasks
+
+1. Add a pet and a task, then find **Edit a pending task** above **Browse tasks**.
+2. Choose **Pending task to edit**. This selector includes pending tasks across all pets, regardless of browse filters; completed tasks cannot be edited.
+3. Change the prefilled title, positive whole-minute duration, priority, recurrence (`once`, `daily`, or `weekly`), scheduled time, or due date. Use 24-hour `HH:MM` for the time. Clear the time or date to remove that optional value.
+4. Click **Save changes** to submit the form. Switching to another task discards unsaved edits. Invalid submitted values show an error and leave the task unchanged.
+
+A successful change keeps the same task and pet, updates the browse order and same-time warnings immediately, and clears the cached plan. Click **Generate schedule** again to use the edited details. An unchanged save retains the plan. Editing recurrence does not create another task; completing a daily or weekly task later creates its next occurrence through the existing completion workflow.
+
+The editor uses Strategy A from the [prompt comparison](docs/prompt_comparison.md), selected for its form-based editing experience after the experiment ended in a tie.
 
 ## Getting started
 
 ### Setup
+
+Use Python 3.10 or newer. Final checks used Python 3.13.7, Streamlit 1.60.0, and pytest 9.1.1; `requirements.txt` pins those tested package versions. Run these commands from the directory containing `app.py`:
 
 ```bash
 python -m venv .venv
@@ -91,12 +107,32 @@ pytest --cov
 
 The tests cover chronological sorting (including minutes, tied times, and untimed tasks), filtering by pet and completion status, daily/weekly recurrence chains, and exact same-time conflict detection across pets and dates. They also check duplicate prevention by object identity, strict owner-setting validation, and rejected updates leaving settings unchanged. Edge cases include empty inputs, zero time budgets, invalid task details and times, completed tasks, repeated completion, leap days, and year changes.
 
-Full terminal output from the successful `python -m pytest` run for Phase 5:
+The integrated suite contains the original 97 backend cases plus 19 frozen UI acceptance cases in `tests/test_pending_task_editing.py`. The UI cases exercise real backend objects through Streamlit AppTest: task selection, draft switching, atomic saves, identity preservation, optional-field clearing, plan invalidation, sorting, warnings, recurrence, stale submissions, and empty states. AppTest is not a visual browser review.
+
+Run the suites separately or together without generating pytest cache files:
+
+```bash
+python -m pytest tests/test_pawpal.py -p no:cacheprovider
+python -m pytest tests/test_pending_task_editing.py -p no:cacheprovider
+python -m pytest -p no:cacheprovider
+```
+
+Strategy A integration verification on October 11, 2026 passed all 97 backend cases, all 19 acceptance cases, and all 116 cases together. The CLI demo and syntax checks also passed. [Actual integration commands and output](docs/prompt_comparison/integration-verification.json) are recorded separately from the experiment's original runs.
+
+The final submission-readiness run on October 11, 2026 also passed all 116 tests, the CLI demo, syntax checks, and staged/unstaged diff checks. Actual pytest output excerpt:
+
+```text
+============================ 116 passed in 20.11s =============================
+```
+
+See the [final audit](docs/submission_readiness.md) and [recorded verification output](docs/submission-verification.json). Personal paths in public logs are replaced with labelled placeholders; test outcomes are unchanged.
+
+Terminal output from the successful `python -m pytest` run for Phase 5 (historical 97-case run; the personal root path below is redacted):
 
 ```text
 ============================= test session starts =============================
 platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
-rootdir: C:\Users\crisu\Downloads\ai110-module2show-pawpal-starter-main\ai110-module2show-pawpal-starter
+rootdir: <USER_HOME>\Downloads\ai110-module2show-pawpal-starter-main\ai110-module2show-pawpal-starter
 plugins: anyio-4.12.1
 collected 97 items
 
@@ -108,7 +144,7 @@ tests\test_pawpal.py ................................................... [ 52%]
 
 This run completed without Windows cache-permission errors; no fallback was needed. If cache permissions interfere with a later run, use `python -m pytest -p no:cacheprovider` to run the same tests without pytest's cache plugin.
 
-**Confidence Level: 4/5 stars (★★★★☆).** All 97 tests pass, which gives me confidence in the backend behaviors covered by the suite. Exact-time conflict detection does not check overlapping task durations, and the Streamlit UI is not comprehensively covered by automated tests, so these results do not verify every possible scheduling or user-interface scenario.
+**Confidence Level: 4/5 stars (★★★★☆).** The 97 backend tests and 19 editor acceptance cases provide coverage for the implemented behaviors. Exact-time conflict detection does not check overlapping task durations, and automated UI checks do not verify every browser interaction, visual layout, or accessibility concern.
 
 ## Smarter Scheduling
 

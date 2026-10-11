@@ -21,7 +21,7 @@ The four-class structure stayed, but the details grew during implementation. Tas
 
 Input validation, pet-task associations, and a consistent plan format are now implemented. Owner.get_all_tasks() returns pairs so a task stays connected to the right pet. The plan dictionary contains selected and skipped tasks, explanations, and time totals. Separate sorting, filtering, and conflict methods let me add features without changing that format.
 
-I kept the scope manageable for a short assignment. The Streamlit app now exposes the scheduling features, but it does not need extra domain classes. Task editing and removal are available in the backend, while the UI focuses on adding, viewing, and completing tasks.
+I kept the scope manageable for a short assignment. The Streamlit app now exposes the scheduling features without extra domain classes. It supports adding, viewing, editing pending tasks, and completing tasks. Editing uses the existing Task.update_details() method and keeps the same task object; removal remains a backend operation.
 
 ---
 
@@ -65,6 +65,8 @@ I personally ran terminal commands, including python main.py and pytest, and sha
 
 Codex also ran and reported automated tests, syntax checks, and Streamlit AppTest smoke checks. AppTest checked task entry, sorting and filtering, conflict warnings, recurring completion, and state across reruns. These were automated UI checks, so I would not describe them as a full manual browser review that I completed myself.
 
+For the pending-task editor, I compared a direct prompt with a staged prompt using the same frozen requirements and acceptance tests. Both implementations passed, so the experiment ended in a tie. I chose Strategy A for integration because its form lets users edit several fields and save them together. The context conditions were unequal: A retained preparation history, while B started in a separate session. That limits what I can conclude about the prompting strategies themselves.
+
 ---
 
 ## 4. Testing and Verification
@@ -73,15 +75,15 @@ Codex also ran and reported automated tests, syntax checks, and Streamlit AppTes
 
 The automated suite checks priority and time-budget scheduling, chronological sorting, pet and completion filters, daily and weekly recurrence, and same-start-time conflict warnings. It also checks empty inputs, invalid times and settings, duplicate object additions, repeated completion, leap days, and year changes. Tests verify that rejected updates do not partly change an object and that detecting conflicts leaves tasks and the plan unchanged.
 
-Phase 4 ended with 87 passing cases. Phase 5 added focused cases for duplicate prevention, strict owner settings, and recurrence chains, and extended a sorting test to check 09:05 before 09:45. The latest recorded pytest run passed all 97 cases. These tests exercise the real classes and methods; only two replace the task accessor to check that Scheduler calls it. Most tests use the real accessor too.
+Phase 4 ended with 87 passing cases. Phase 5 added focused cases for duplicate prevention, strict owner settings, and recurrence chains, and extended a sorting test to check 09:05 before 09:45. That backend suite reached 97 cases and remains unchanged. The integrated editor adds 19 frozen Streamlit AppTest cases, bringing the suite to 116 passing cases. These tests use real backend objects; a few narrowly scoped wrappers or accessor replacements check that the intended APIs are called.
 
-These checks matter because a plausible-looking schedule can still hide errors, such as assigning a task to the wrong pet or creating duplicate recurring tasks. Streamlit AppTest smoke checks also verified that ordinary reruns do not add tasks and that completing a task clears the saved plan. Those UI checks were separate from the 97-case backend suite.
+These checks matter because a plausible-looking schedule can still hide errors, such as assigning a task to the wrong pet or creating duplicate recurring tasks. The saved editor tests check identical task names, unsaved drafts, atomic rejection, object identity, optional-field clearing, cached plans, recurrence, stale submissions, and empty states. Earlier UI smoke checks were separate from the backend suite; the 19 editor cases now run as part of pytest.
 
 **b. Confidence**
 
-My confidence is 4 out of 5. The 97 passing tests and UI smoke checks support the behaviors that are implemented, but they are not proof that every possible interaction works. Conflict detection still does not check duration overlaps, and the Streamlit UI is not comprehensively covered by automated tests or a recorded visual browser review.
+My confidence is 4 out of 5. The 116 passing tests support the behaviors that are implemented, but they are not proof that every possible interaction works. Conflict detection still does not check duration overlaps, and automated UI coverage does not replace a recorded visual browser or accessibility review.
 
-With more time, I would turn the UI smoke checks into repeatable tests and cover longer user flows, such as completing tasks while changing filters. If I added interval-overlap detection, I would test tasks inside other tasks, intervals crossing midnight, and tasks that meet at an endpoint without overlapping.
+With more time, I would extend the repeatable UI tests to longer flows, such as completing tasks while changing filters, and review keyboard use and layout in a browser. If I added interval-overlap detection, I would test tasks inside other tasks, intervals crossing midnight, and tasks that meet at an endpoint without overlapping.
 
 ---
 
@@ -93,7 +95,7 @@ The separation between the backend and UI worked well. Sorting, filtering, recur
 
 **b. What you would improve**
 
-I would first make the UI checks part of the saved test suite and add storage so pets and tasks survive beyond a Streamlit session. I would also consider full duration-overlap detection and UI controls for editing tasks. Before adding those features, I would define their behavior and edge cases so the implementation stays understandable instead of growing only because AI can generate more code.
+With pending-task editing and its acceptance tests now integrated, I would next consider storage so pets and tasks survive beyond a Streamlit session. I would also consider full duration-overlap detection and broader browser testing. Before adding those features, I would define their behavior and edge cases so the implementation stays understandable instead of growing only because AI can generate more code.
 
 **c. Key takeaway**
 

@@ -1,0 +1,133 @@
+{
+  "phase": "Strategy A integration into main working tree",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "python_executable": "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "checks": [
+    {
+      "check": "baseline",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pawpal.py",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:26:42.465596-05:00",
+      "elapsed_seconds": 0.590714999998454,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "============================= test session starts =============================\r\nplatform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0\r\nrootdir: <USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter\r\nplugins: anyio-4.12.1\r\ncollected 97 items\r\n\r\ntests\\test_pawpal.py ................................................... [ 52%]\r\n..............................................                           [100%]\r\n\r\n============================= 97 passed in 0.11s ==============================\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "acceptance",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "tests/test_pending_task_editing.py",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:26:43.056952-05:00",
+      "elapsed_seconds": 15.449064399988856,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "============================= test session starts =============================\r\nplatform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0\r\nrootdir: <USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter\r\nplugins: anyio-4.12.1\r\ncollected 19 items\r\n\r\ntests\\test_pending_task_editing.py ...................                   [100%]\r\n\r\n============================= 19 passed in 14.76s =============================\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "combined",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:26:58.507190-05:00",
+      "elapsed_seconds": 16.481761600007303,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "============================= test session starts =============================\r\nplatform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0\r\nrootdir: <USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter\r\nplugins: anyio-4.12.1\r\ncollected 116 items\r\n\r\ntests\\test_pawpal.py ................................................... [ 43%]\r\n..............................................                           [ 83%]\r\ntests\\test_pending_task_editing.py ...................                   [100%]\r\n\r\n============================ 116 passed in 15.65s =============================\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "demo",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "main.py"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:27:14.990098-05:00",
+      "elapsed_seconds": 0.10188299999572337,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "Today's Schedule\r\nOwner: Jordan | Available time: 40 min\r\n\r\n1. Mochi: Feeding (5 min) [high]\r\n   High priority; fits the remaining time.\r\n2. Biscuit: Morning walk (25 min) [high]\r\n   High priority; fits the remaining time.\r\n3. Mochi: Playtime (10 min) [medium]\r\n   Medium priority; fits the remaining time.\r\n\r\nPlanned: 40 min | Remaining: 0 min\r\n\r\nSkipped:\r\n- Biscuit: Grooming - Needs 20 min; only 0 min remain.\r\n\r\nSorting and Filtering Demo - Original order\r\n- 18:00 | Biscuit: Evening walk [pending]\r\n- Untimed | Biscuit: Grooming [pending]\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nSorted by scheduled time\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n- 18:00 | Biscuit: Evening walk [pending]\r\n- Untimed | Biscuit: Grooming [pending]\r\n\r\nPet filter: mochi\r\n- 07:30 | Mochi: Feeding [completed]\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nCompleted tasks\r\n- 07:30 | Mochi: Feeding [completed]\r\n\r\nPending tasks for Mochi\r\n- 12:00 | Mochi: Playtime [pending]\r\n\r\nRecurring Tasks Demo - Completed on 2026-10-11\r\n- Mochi: Feeding (daily) - original completed\r\n  Next: 2026-10-12 at 07:30 [pending]\r\n- Mochi: Grooming (weekly) - original completed\r\n  Next: 2026-10-18 at 18:00 [pending]\r\nCompleting Feeding again adds nothing: 4 tasks total.\r\n\r\nTask Conflicts Demo\r\n- Conflict on 2026-10-11 at 07:30: Biscuit: Morning walk; Mochi: Feeding are scheduled at the same time.\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "syntax",
+      "argv": [
+        "<USER_HOME>\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-c",
+        "from pathlib import Path; paths = [Path('app.py'), Path('main.py'), Path('pawpal_system.py'), *Path('tests').glob('test_*.py')]; [compile(p.read_text(encoding='utf-8'), str(p), 'exec') for p in paths]; print('Syntax OK:', ', '.join(str(p) for p in paths))"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:27:15.093163-05:00",
+      "elapsed_seconds": 0.11788649996742606,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "Syntax OK: app.py, main.py, pawpal_system.py, tests\\test_pawpal.py, tests\\test_pending_task_editing.py\r\n",
+      "stderr": ""
+    },
+    {
+      "check": "diff-check",
+      "argv": [
+        "git",
+        "-c",
+        "safe.directory=<USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter",
+        "diff",
+        "--check"
+      ],
+      "cwd": "<USER_HOME>\\Downloads\\ai110-module2show-pawpal-starter-main\\ai110-module2show-pawpal-starter",
+      "started_at": "2026-10-11T17:27:15.211811-05:00",
+      "elapsed_seconds": 0.031123500026296824,
+      "local_test_date": "2026-10-11",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'ai_interactions.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n"
+    }
+  ],
+  "final_review": {
+    "checked_at": "2026-10-11T17:28:16.134292-05:00",
+    "branch": "main",
+    "head_unchanged": true,
+    "modified_during_integration": [
+      "README.md",
+      "ai_interactions.md",
+      "app.py",
+      "docs/prompt_comparison.md"
+    ],
+    "added_during_integration": [
+      "docs/prompt_comparison/integration-verification.json",
+      "tests/test_pending_task_editing.py"
+    ],
+    "app_matches_preserved_a": true,
+    "acceptance_matches_frozen": true,
+    "backend_and_original_tests_unchanged": true,
+    "candidate_and_original_archive_hashes_unchanged": true,
+    "new_or_modified_cache_files": [],
+    "credential_pattern_matches": [],
+    "existing_tracked_cache": "__pycache__/pawpal_system.cpython-314.pyc",
+    "documentation_links_resolve": true,
+    "final_diff_check_exit_code": 0,
+    "final_diff_check_stderr": "warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'ai_interactions.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'app.py', LF will be replaced by CRLF the next time Git touches it\n"
+  }
+}

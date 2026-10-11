@@ -1,0 +1,116 @@
+diff --git a/app.py b/app.py
+index 4ccafea..cac3399 100644
+--- a/app.py
++++ b/app.py
+@@ -17,6 +17,103 @@ def complete_task_today(pet: Pet, task: Task) -> None:
+     st.session_state.completion_notice = message
+ 
+ 
++def load_task_editor(pet: Pet, task: Task) -> None:
++    """Load a fresh draft without changing the selected session objects."""
++    st.session_state.edit_target = (pet, task)
++    st.session_state.edit_title = task.name
++    st.session_state.edit_duration = task.duration_minutes
++    st.session_state.edit_priority = task.priority
++    st.session_state.edit_recurrence = task.recurrence
++    st.session_state.edit_scheduled_time = task.scheduled_time or ""
++    st.session_state.edit_due_date = task.due_date
++
++
++def save_task_changes(pet: Pet, task: Task) -> None:
++    """Validate and save the rendered target before the next display rerun."""
++    # Capture the rendered objects in callback args: a stale submission must
++    # never fall through to whichever pending task now occupies its old index.
++    owner = st.session_state.owner
++    if task.completed or not any(
++        current_pet is pet and current_task is task
++        for current_pet, current_task in owner.get_all_tasks()
++    ):
++        st.session_state.edit_notice = (
++            "error", "This task is completed or no longer available. Select a pending task to edit."
++        )
++        return
++
++    before = vars(task).copy()
++    try:
++        task.update_details(
++            name=st.session_state.edit_title.strip(),
++            duration_minutes=st.session_state.edit_duration,
++            priority=st.session_state.edit_priority,
++            recurrence=st.session_state.edit_recurrence,
++            scheduled_time=st.session_state.edit_scheduled_time.strip() or None,
++            due_date=st.session_state.edit_due_date,
++        )
++    except ValueError as error:
++        st.session_state.edit_notice = ("error", str(error))
++    else:
++        if vars(task) != before:
++            st.session_state.pop("plan", None)
++            st.session_state.edit_notice = ("success", f"Saved changes to {pet.name}: {task.name}.")
++        else:
++            st.session_state.edit_notice = ("info", "No changes to save.")
++        load_task_editor(pet, task)
++
++
++def render_task_editor(task_pairs: list[tuple[Pet, Task]]) -> None:
++    """Offer every pending task independently of the browse filters."""
++    st.markdown("### Edit a pending task")
++    notice = st.session_state.pop("edit_notice", None)
++    if notice:
++        kind, message = notice
++        {"error": st.error, "success": st.success, "info": st.info}[kind](message)
++
++    options = {
++        f"{number}. {pet.name}: {task.name}": (pet, task)
++        for number, (pet, task) in enumerate(task_pairs, start=1)
++        if not task.completed
++    }
++    if not options:
++        st.session_state.pop("edit_target", None)
++        st.session_state.pop("edit_task", None)
++        st.info("No pending tasks to edit. Add a pet and a task above, or add a new task if all are completed.")
++        return
++
++    previous_pet, previous_task = st.session_state.get("edit_target", (None, None))
++    if st.session_state.get("edit_task") not in options:
++        # A saved title changes its label; retain selection by identity.
++        st.session_state.edit_task = next(
++            (label for label, (pet, task) in options.items()
++             if pet is previous_pet and task is previous_task),
++            next(iter(options)),
++        )
++    label = st.selectbox("Pending task", list(options), key="edit_task")
++    pet, task = options[label]
++    if pet is not previous_pet or task is not previous_task:
++        load_task_editor(pet, task)
++
++    st.caption("Changes apply only when saved. Selecting another task discards unsaved edits.")
++    col1, col2, col3 = st.columns(3)
++    with col1:
++        st.text_input("Title", key="edit_title")
++    with col2:
++        st.number_input("Duration (minutes)", min_value=1, step=1, key="edit_duration")
++    with col3:
++        st.selectbox("Priority", ["high", "medium", "low"], key="edit_priority")
++    col1, col2, col3 = st.columns(3)
++    with col1:
++        st.text_input("Scheduled time (optional)", placeholder="HH:MM", key="edit_scheduled_time")
++    with col2:
++        st.selectbox("Recurrence", ["once", "daily", "weekly"], key="edit_recurrence")
++    with col3:
++        st.date_input("Due date (optional)", value=None, min_value=date.min,
++                      max_value=date.max, key="edit_due_date")
++    st.button("Save changes", key="edit_save", on_click=save_task_changes, args=(pet, task))
++
++
+ st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
+ 
+ if "owner" not in st.session_state:
+@@ -145,6 +242,7 @@ if st.button("Add task", disabled=selected_pet_index is None, key="add_task"):
+         st.success(f"Added {task.name} for {owner.pets[selected_pet_index].name}.")
+ 
+ task_pairs = owner.get_all_tasks()
++render_task_editor(task_pairs)
+ st.markdown("### Browse tasks")
+ col1, col2 = st.columns(2)
+ with col1:

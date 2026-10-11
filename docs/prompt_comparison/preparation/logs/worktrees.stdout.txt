@@ -1,0 +1,12 @@
+worktree <USER_HOME>/Downloads/ai110-module2show-pawpal-starter-main/ai110-module2show-pawpal-starter
+HEAD 98805949bffcb69f5e5299a4deaafe6b8bdb3623
+branch refs/heads/main
+
+worktree <USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-a
+HEAD 98805949bffcb69f5e5299a4deaafe6b8bdb3623
+branch refs/heads/experiment/prompt-a
+
+worktree <USER_HOME>/AppData/Local/Temp/pawpal-prompt-comparison-9880594/prompt-b
+HEAD 98805949bffcb69f5e5299a4deaafe6b8bdb3623
+branch refs/heads/experiment/prompt-b
+
