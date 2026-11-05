@@ -2,6 +2,75 @@
 
 PawPal+ helps a pet owner keep track of care tasks across multiple pets. The original Streamlit application let owners add pets and tasks, edit and complete tasks, find free time, and generate a daily plan. The AI110 extension answers general care questions from attributed local references and suggests new tasks for the owner's existing pets. The deterministic `Scheduler` decides whether suggested tasks fit the owner's time budget. AI suggestions never add, complete, delete, or save a task.
 
+## AI Assistant — Example Inputs and Outputs
+
+Examples A and B are **real Gemini API observations** copied from the November 5, 2026 UTC [live comparison record](docs/ai_live_comparison.json). They are single runs, so a new call may produce different wording or tasks. Example C is a **deterministic application safety response**, reproduced with the command shown below; it makes no Gemini call. These are application outputs, not veterinary advice.
+
+### A. Grounded pet-care answer (live Gemini)
+
+Input:
+
+```text
+How should I plan dog exercise and fresh water on a warm day?
+```
+
+Recorded output (answer and source IDs):
+
+```json
+{
+  "answer": "Plan walks outside the hottest part of the day, take breaks, and ensure your pet has access to shade and fresh water. Always bring water for your pet during exercise, and consult a veterinarian before starting a new program, particularly for overweight or short-nosed breeds. [dog_care:0] [dog_care:1]",
+  "sources": [
+    {"id": "dog_care:0", "url": "https://avma.org/resources/pet-owners/petcare/warm-weather-pet-safety"},
+    {"id": "dog_care:1", "url": "https://avma.org/resources/pet-owners/petcare/warm-weather-pet-safety"}
+  ]
+}
+```
+
+### B. Care-task planning and human review (live Gemini, deterministic Scheduler)
+
+Input (demo owner has one dog named Mochi, no existing tasks, and a 30-minute budget):
+
+```text
+Suggest a short dog exercise and water routine for Mochi on a warm day.
+```
+
+Recorded output excerpt (all proposed tasks and the final review step):
+
+```json
+{
+  "status": "ok",
+  "tasks": [
+    {"pet": "Mochi", "name": "Morning or evening walk", "duration_minutes": 20, "priority": "high", "budget_result": "Fits today's budget"},
+    {"pet": "Mochi", "name": "Fresh water and shade check", "duration_minutes": 5, "priority": "high", "budget_result": "Fits today's budget"},
+    {"pet": "Mochi", "name": "Hydration break during activity", "duration_minutes": 5, "priority": "medium", "budget_result": "Fits today's budget"}
+  ],
+  "trace": [
+    {"step": "Check schedule", "detail": "Scheduler selected 3 of 3 proposals under the existing budget."},
+    {"step": "Present for review", "detail": "Suggestions only; no tasks were added or saved."}
+  ]
+}
+```
+
+The trace excerpt omits earlier steps; the [full record](docs/ai_live_comparison.json) includes retrieval, validation, and cited source IDs. The owner must use **Add task** to accept a suggestion.
+
+### C. Poisoning safety response (deterministic, no Gemini call)
+
+Input:
+
+```text
+My dog swallowed poison
+```
+
+Output from `python -c "import json; from ai.gemini_client import ask_gemini; print(json.dumps(ask_gemini('My dog swallowed poison'), ensure_ascii=False, indent=2))"`:
+
+```json
+{
+  "answer": "If this may be an emergency, contact a veterinarian or emergency veterinary clinic immediately. For suspected poisoning, contact a veterinarian or animal poison control. Do not rely on a care plan.",
+  "sources": [],
+  "status": "guarded"
+}
+```
+
 ## AI110 features and scope
 
 | Original application | AI extension |
