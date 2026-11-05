@@ -8,8 +8,10 @@ flowchart LR
     handler -->|bounded structured request| gemini[Gemini API]
     gemini -->|answer or proposal with cited IDs| handler
     handler -->|validated answer and sources| ui
-    handler -->|candidate tasks for validation| scheduler[Deterministic Scheduler]
+    handler -->|validated candidate tasks on owner copy| scheduler[Deterministic Scheduler]
     scheduler -->|budget decision and action trace| handler
+    ui -->|present review-only proposals| review[Pet owner reviews AI proposals]
+    review -->|optional manual Add task| ui
     ui -->|user adds or edits tasks; generate plan| scheduler
     scheduler -->|plan, conflicts, free slots| ui
     ui -->|explicit save or load| storage[(Local JSON persistence)]
