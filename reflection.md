@@ -102,3 +102,66 @@ Pending-task editing, JSON storage and next-available-slot search are now implem
 **c. Key takeaway**
 
 My main takeaway is that using AI does not remove my role as the lead architect. Codex can generate code quickly, but I am responsible for the requirements, class responsibilities, scope decisions, validation, and understanding the final product. A passing test suite is useful evidence, and I still need to know what it covers and what it leaves out. The best result comes from giving focused instructions, reviewing the changes and evidence, and choosing solutions I can explain.
+# AI110 final-project extension (November 2026)
+
+This section supplements the earlier Module 2 reflection below. Repository evidence shows that the AI110 work extended the existing four-class scheduler with local retrieval, Gemini answers, and a review-only planning workflow. The original scheduling and JSON Save/Load behavior stayed in place. The AI tools helped inspect the staged implementation, identify gaps, draft modular changes, and generate tests. The source notes were checked against AVMA and ASPCA pages before being added; source URLs and the live model outputs are recorded in the repository.
+
+The first planner syntax check caught an unclosed JSON-schema dictionary, which was corrected before evaluation. The first full pytest attempt ran into a Windows permission error while pytest tried to clear an existing `.pytest_temp` directory; those were fixture setup errors, not failed AI assertions. A later run with a fresh temporary directory is recorded in the final verification results. The deterministic AI evaluation used mocked model calls so safety and citation rules could be checked without network variability. A separate live comparison showed a direct Gemini answer with uncited, specific advice and a grounded answer citing two AVMA chunks; the direct answer was truncated at 200 tokens. The live planning trace recorded three suggestions passing the scheduler's 30-minute demo budget. These observations support only the tested examples.
+
+The biggest limitation is that a valid source ID does not prove every sentence is supported by its source. Keyword retrieval can also miss a relevant care question or retrieve a broad paragraph. The emergency and medical guards cover common patterns but cannot replace veterinary judgment. The scheduler checks the total daily budget for proposals; it does not create appointment times. I would review the UI in a real browser and ask a veterinarian to review any medical-facing wording before wider use.
+
+## Personal Reflection — PawPal+ AI110 Final Project
+
+For my AI110 final project, I extended my original PawPal+ pet-care scheduling application by integrating Google Gemini, Retrieval-Augmented Generation (RAG), and an AI-powered pet-care planning assistant.
+
+### What I Learned
+
+One of the most important things I learned was how to integrate a large language model into an existing Python application. Originally, PawPal+ used predefined scheduling rules to organize pet-care tasks. By adding Gemini and RAG, I learned how AI can make an application more interactive and useful.
+
+I also learned how RAG works. Instead of relying only on the model's existing knowledge, the application retrieves relevant information from a knowledge base and uses it to generate answers with citations.
+
+### Challenges I Faced
+
+One of my biggest challenges was connecting Gemini to my Streamlit application. I initially encountered API configuration issues, unavailable models, and slow API responses.
+
+I also faced difficulties with Python indentation and understanding the difference between writing Python code in VS Code and executing commands in Git Bash.
+
+By troubleshooting these problems, I improved my understanding of Python, API integration, environment variables, and debugging.
+
+### How I Used AI Tools
+
+I used ChatGPT and Codex throughout the development process to understand AI concepts, generate code, troubleshoot errors, and improve my project.
+
+Codex helped implement additional features, including multi-source RAG, a multi-step planning workflow, automated evaluation, and documentation.
+
+However, I also tested the application myself, checked its responses, ran automated tests, and reviewed the changes before committing them to GitHub.
+
+### Human-in-the-Loop
+
+This project helped me understand the importance of keeping humans involved in AI systems.
+
+AI-generated recommendations are not always correct, especially when dealing with pet health and care. That is why PawPal+ provides supporting sources and allows users to review proposed tasks instead of automatically changing their schedules.
+
+As a future software engineer, I believe AI should assist people in making decisions rather than completely replacing human judgment.
+
+### Testing and Evaluation
+
+I verified the Gemini integration by asking questions about dog exercise and drinking water and checking the generated responses.
+
+The final project also passed 178 automated tests, including 23 deterministic AI evaluation cases.
+
+This helped me understand that building an AI feature is not enough. It is equally important to test its reliability, handle errors, and evaluate its limitations.
+
+### Future Improvements
+
+In the future, I would like to expand the pet-care knowledge base, improve retrieval accuracy, support more types of pets, and make the AI planning assistant more personalized.
+
+### Final Thoughts
+
+Overall, this project helped me move beyond simply using AI tools to understanding how AI systems can be designed, integrated, tested, and improved.
+
+The biggest lesson I learned is that AI can make software more powerful, but reliable applications still require careful engineering, testing, and human oversight.
+
+---
+
+
